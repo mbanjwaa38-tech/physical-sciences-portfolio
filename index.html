@@ -6,7 +6,6 @@
 <title>Grade 12 Physical Science Portal</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Grotesk:wght@500;700&display=swap');
-
 :root {
   --primary: #0f172a;
   --accent: #06b6d4;
@@ -17,21 +16,16 @@
   --text: #1e293b;
   --text-light: #64748b;
 }
-
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Inter', sans-serif; background: var(--bg); color: var(--text); line-height:1.6; }
-
 header { background: var(--primary); color:white; padding:2rem; text-align:center; }
 h1 { font-family:'Space Grotesk', sans-serif; font-size:2rem; }
 .subtitle { font-size:1rem; color:#94a3b8; margin-top:0.5rem; }
-
 main { padding:2rem; max-width:1200px; margin:0 auto; }
 input, button { padding:0.5rem; margin:0.5rem 0; width:100%; max-width:300px; }
 button { cursor:pointer; background:var(--accent); color:white; border:none; border-radius:5px; }
-
 #login-step1, #login-step2, #book-content { margin-top:2rem; }
 #login-step2, #book-content { display:none; }
-
 .card { background: var(--card); padding:1.5rem; margin-bottom:1rem; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
 .card h3 { color:var(--primary); margin-bottom:0.5rem; }
 .card ul { list-style:none; padding-left:1rem; }
@@ -39,12 +33,9 @@ button { cursor:pointer; background:var(--accent); color:white; border:none; bor
 .card li::before { content:'▸'; position:absolute; left:-1rem; color:var(--accent); font-weight:bold; }
 #error, #code-error, #timer { color:red; margin-top:0.5rem; }
 </style>
-
-<!-- EmailJS SDK -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
-  // Initialize EmailJS with your public key
-  emailjs.init("_6kozn-J9-QGCchMe");
+emailjs.init("_6kozn-J9-QGCchMe"); // Your public key
 </script>
 </head>
 <body>
@@ -56,19 +47,20 @@ button { cursor:pointer; background:var(--accent); color:white; border:none; bor
 
 <main>
 
-<!-- Step 1: Student Info -->
+<!-- Step 1: Sign Up / Log In -->
 <div id="login-step1">
-  <h2>Step 1: Enter Your Details</h2>
+  <h2>Sign Up / Log In</h2>
   <input type="email" id="email" placeholder="Email"><br>
   <input type="text" id="school" placeholder="School"><br>
   <input type="password" id="password" placeholder="Password"><br>
-  <button onclick="stepOneLogin()">Next</button>
+  <button onclick="signUp()">Sign Up</button>
+  <button onclick="logIn()">Log In</button>
   <p id="error"></p>
 </div>
 
 <!-- Step 2: Access Code -->
 <div id="login-step2">
-  <h2>Step 2: Access Code</h2>
+  <h2>Enter Access Code</h2>
   <input type="text" id="access-code" placeholder="Enter Code"><br>
   <button id="send-code-btn" onclick="sendCode()">Send Code to Email</button>
   <button onclick="verifyCode()">Unlock Book</button>
@@ -79,212 +71,174 @@ button { cursor:pointer; background:var(--accent); color:white; border:none; bor
 <!-- Book Content -->
 <div id="book-content">
 <h2>Solutions for All - Grade 12 Physical Sciences</h2>
-
 <section class="section">
 <h2>1. Learner-Centred Teaching</h2>
-<div class="card">
-<h3>Teaching Model</h3>
+<div class="card"><h3>Teaching Model</h3>
 <ul>
 <li>Diagnostic Assessments</li>
 <li>Conceptual Explanations</li>
 <li>Targeted Multimedia Resources</li>
 <li>Assessment Worksheets</li>
-</ul>
-</div>
-<div class="card">
-<h3>Creative Use of Resources</h3>
+</ul></div>
+<div class="card"><h3>Creative Use of Resources</h3>
 <ul>
 <li>PhET Simulations</li>
 <li>Practical Demonstrations & Experiments</li>
 <li>VR Lab Activities</li>
 <li>Digital Quizzes</li>
-</ul>
-</div>
+</ul></div>
 </section>
-
 <section class="section">
 <h2>2. Promoting Physical Sciences</h2>
-<div class="card">
-<h3>Competitions & Outreach</h3>
+<div class="card"><h3>Competitions & Outreach</h3>
 <ul>
 <li>Science Olympiads & Expos</li>
 <li>Extra Lessons & Enrichment Programs</li>
 <li>Educational Excursions</li>
 <li>University Outreach Programs</li>
 <li>STEM Mentor Programmes</li>
-</ul>
-</div>
-<div class="card">
-<h3>Enthusiasm & Motivation</h3>
+</ul></div>
+<div class="card"><h3>Enthusiasm & Motivation</h3>
 <ul>
 <li>Interactive Lessons</li>
 <li>STEM Awareness Initiatives</li>
 <li>Real-World Science Applications</li>
 <li>Career Guidance & Mentorship</li>
-</ul>
-</div>
+</ul></div>
 </section>
-
 <section class="section">
 <h2>3. Professional Development & Leadership</h2>
-<div class="card">
-<h3>Subject Competence</h3>
+<div class="card"><h3>Subject Competence</h3>
 <ul>
 <li>Alignment of Lesson Plans with National Standards</li>
 <li>Practical Experiments & Intervention Materials</li>
 <li>Content Workshops & ICT Tools</li>
-</ul>
-</div>
-<div class="card">
-<h3>Lifelong Learning</h3>
+</ul></div>
+<div class="card"><h3>Lifelong Learning</h3>
 <ul>
 <li>Ongoing Postgraduate Studies</li>
 <li>Curriculum & Content Workshops</li>
 <li>Professional Learning Communities</li>
 <li>Examiner Roles & Moderation</li>
-</ul>
-</div>
-<div class="card">
-<h3>Activities Beyond the Classroom</h3>
+</ul></div>
+<div class="card"><h3>Activities Beyond the Classroom</h3>
 <ul>
 <li>Science Competitions & Olympiads</li>
 <li>Educational Excursions</li>
 <li>Tutoring & Extra Lessons</li>
 <li>STEM Mentorship Programs</li>
-</ul>
-</div>
+</ul></div>
 </section>
-
 </div>
 
 <script>
-// LocalStorage keys
-const STORAGE_EMAIL = 'studentEmail';
-const STORAGE_PASSWORD = 'studentPassword';
-const STORAGE_SCHOOL = 'studentSchool';
-const STORAGE_CODE = 'studentCode';
+let users = JSON.parse(localStorage.getItem('users')||'[]');
+let currentCode='';
+let canResend=true;
+let cooldown=180; // 3 min
 
-let currentCode = '';
-let canResend = true;
-let cooldown = 180; // 3 minutes
+function signUp(){
+  const email=document.getElementById('email').value;
+  const school=document.getElementById('school').value;
+  const password=document.getElementById('password').value;
+  const errorEl=document.getElementById('error');
+  if(!email || !school || !password){ errorEl.textContent="All fields required"; return; }
 
-// Step 1 login
-function stepOneLogin() {
-  const email = document.getElementById('email').value;
-  const school = document.getElementById('school').value;
-  const password = document.getElementById('password').value;
-  const errorEl = document.getElementById('error');
-
-  if (!email || !school || !password) {
-    errorEl.textContent = "All fields are required.";
+  if(users.some(u=>u.email===email)){
+    errorEl.textContent="Email already registered. Please log in.";
     return;
   }
 
-  const savedEmail = localStorage.getItem(STORAGE_EMAIL);
-  const savedPassword = localStorage.getItem(STORAGE_PASSWORD);
+  // first-time signup
+  const tempUser={email, school, password};
+  localStorage.setItem('tempUser', JSON.stringify(tempUser));
+  document.getElementById('login-step1').style.display='none';
+  document.getElementById('login-step2').style.display='block';
 
-  if(savedEmail && savedPassword){
-    if(savedEmail === email && savedPassword === password){
-      document.getElementById('login-step1').style.display = 'none';
-      document.getElementById('book-content').style.display = 'block';
-      return;
-    } else {
-      errorEl.textContent = "Incorrect email or password.";
-      return;
-    }
-  }
-
-  // First-time login: show code step
-  localStorage.setItem('tempEmail', email);
-  localStorage.setItem('tempSchool', school);
-  localStorage.setItem('tempPassword', password);
-  document.getElementById('login-step1').style.display = 'none';
-  document.getElementById('login-step2').style.display = 'block';
+  // optional: show code popup
+  currentCode=generateRandomCode();
+  alert(`Your access code: ${currentCode}`);
 }
 
-// Generate 8-character random code
-function generateRandomCode(length = 8){
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
-  let code = '';
-  for(let i=0;i<length;i++){
-    code += chars.charAt(Math.floor(Math.random()*chars.length));
+function logIn(){
+  const email=document.getElementById('email').value;
+  const password=document.getElementById('password').value;
+  const errorEl=document.getElementById('error');
+  if(!email || !password){ errorEl.textContent="All fields required"; return; }
+
+  const user=users.find(u=>u.email===email && u.password===password);
+  if(user){
+    document.getElementById('login-step1').style.display='none';
+    document.getElementById('book-content').style.display='block';
+  }else{
+    errorEl.textContent="Email or password incorrect.";
   }
+}
+
+// generate random code
+function generateRandomCode(length=8){
+  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+  let code='';
+  for(let i=0;i<length;i++){ code+=chars.charAt(Math.floor(Math.random()*chars.length)); }
   return code;
 }
 
-// Send code via EmailJS
+// send code via EmailJS
 function sendCode(){
   if(!canResend) return;
+  const tempUser=JSON.parse(localStorage.getItem('tempUser'));
+  if(!tempUser){ alert("No user data"); return; }
 
-  const studentEmail = localStorage.getItem('tempEmail');
-  if(!studentEmail){ alert("Email not set"); return; }
+  currentCode=currentCode||generateRandomCode();
+  localStorage.setItem('tempCode', currentCode);
 
-  currentCode = generateRandomCode();
-  localStorage.setItem(STORAGE_CODE, currentCode);
-
-  const serviceID = "service_ah9oypr";   // Your Service ID
-  const templateID = "template_0qg4mop"; // Your Template ID
-
-  const templateParams = {
-      to_email: studentEmail,
-      code: currentCode
-  };
+  const serviceID="service_ah9oypr";
+  const templateID="template_0qg4mop";
+  const templateParams={to_email: tempUser.email, code: currentCode};
 
   emailjs.send(serviceID, templateID, templateParams)
-    .then(() => {
-        alert("Code sent to: " + studentEmail);
-        startCooldown();
-    }, (err) => {
-        alert("Failed to send email. Check EmailJS setup.");
-        console.error(err);
-    });
+    .then(()=>{alert(`Code sent to: ${tempUser.email}`); startCooldown();},
+          (err)=>{alert("Email send failed. Check EmailJS."); console.error(err);});
 }
 
-// 3-minute resend timer
+// timer
 function startCooldown(){
-    canResend = false;
-    const btn = document.getElementById('send-code-btn');
-    btn.disabled = true;
-    let timer = cooldown;
-    const timerEl = document.getElementById('timer');
-    const interval = setInterval(()=>{
-        timerEl.textContent = `Resend code available in ${timer}s`;
-        timer--;
-        if(timer < 0){
-            clearInterval(interval);
-            timerEl.textContent = '';
-            btn.disabled = false;
-            canResend = true;
-        }
-    },1000);
+  canResend=false;
+  const btn=document.getElementById('send-code-btn');
+  btn.disabled=true;
+  let timer=cooldown;
+  const timerEl=document.getElementById('timer');
+  const interval=setInterval(()=>{
+    timerEl.textContent=`Resend code in ${timer}s`; timer--;
+    if(timer<0){ clearInterval(interval); timerEl.textContent=''; btn.disabled=false; canResend=true; }
+  },1000);
 }
 
-// Verify code
+// verify code
 function verifyCode(){
-  const code = document.getElementById('access-code').value;
-  const savedCode = localStorage.getItem(STORAGE_CODE);
-  const codeErrorEl = document.getElementById('code-error');
+  const inputCode=document.getElementById('access-code').value;
+  const tempUser=JSON.parse(localStorage.getItem('tempUser'));
+  const savedCode=localStorage.getItem('tempCode');
+  const codeErrorEl=document.getElementById('code-error');
+  if(inputCode===savedCode){
+    users.push(tempUser);
+    localStorage.setItem('users', JSON.stringify(users));
 
-  if(code === savedCode){
-    localStorage.setItem(STORAGE_EMAIL, localStorage.getItem('tempEmail'));
-    localStorage.setItem(STORAGE_PASSWORD, localStorage.getItem('tempPassword'));
-    localStorage.setItem(STORAGE_SCHOOL, localStorage.getItem('tempSchool'));
+    // clear temp
+    localStorage.removeItem('tempUser');
+    localStorage.removeItem('tempCode');
 
-    // Clear temp
-    localStorage.removeItem('tempEmail');
-    localStorage.removeItem('tempPassword');
-    localStorage.removeItem('tempSchool');
-    localStorage.removeItem(STORAGE_CODE);
-
-    document.getElementById('login-step2').style.display = 'none';
-    document.getElementById('book-content').style.display = 'block';
-  } else {
-    codeErrorEl.textContent = "Incorrect code. Try again.";
+    document.getElementById('login-step2').style.display='none';
+    document.getElementById('book-content').style.display='block';
+  }else{
+    codeErrorEl.textContent="Incorrect code. Try again.";
   }
 }
 </script>
+
 </body>
 </html>
+
 
 
 
