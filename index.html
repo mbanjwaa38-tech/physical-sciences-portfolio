@@ -37,8 +37,7 @@ button { cursor:pointer; background:var(--accent); color:white; border:none; bor
 .card ul { list-style:none; padding-left:1rem; }
 .card li { padding:0.25rem 0; position:relative; }
 .card li::before { content:'▸'; position:absolute; left:-1rem; color:var(--accent); font-weight:bold; }
-#error, #code-error { color:red; margin-top:0.5rem; }
-
+#error, #code-error, #timer { color:red; margin-top:0.5rem; }
 </style>
 </head>
 <body>
@@ -62,10 +61,12 @@ button { cursor:pointer; background:var(--accent); color:white; border:none; bor
 
 <!-- Step 2: Access Code -->
 <div id="login-step2">
-  <h2>Step 2: Enter Access Code</h2>
-  <input type="text" id="access-code" placeholder="Access Code"><br>
+  <h2>Step 2: Access Code</h2>
+  <input type="text" id="access-code" placeholder="Enter Code"><br>
+  <button id="send-code-btn" onclick="sendCode()">Send Code to Email</button>
   <button onclick="verifyCode()">Unlock Book</button>
   <p id="code-error"></p>
+  <p id="timer"></p>
 </div>
 
 <!-- Book Content -->
@@ -150,13 +151,13 @@ button { cursor:pointer; background:var(--accent); color:white; border:none; bor
 </div>
 
 <script>
-// Pre-generated access codes with 24h expiry
-let validCodes = [
-  {code:'PS2026-001', expires: new Date().getTime() + 24*60*60*1000},
-  {code:'PS2026-002', expires: new Date().getTime() + 24*60*60*1000}
-];
+// LocalStorage keys
+const STORAGE_EMAIL = 'studentEmail';
+const STORAGE_PASSWORD = 'studentPassword';
+const STORAGE_SCHOOL = 'studentSchool';
+const STORAGE_CODE = 'studentCode';
 
-// Step 1 login (first time or returning)
+// Step 1 login
 function stepOneLogin() {
   const email = document.getElementById('email').value;
   const school = document.getElementById('school').value;
@@ -168,13 +169,12 @@ function stepOneLogin() {
     return;
   }
 
-  // Check if user info already stored in localStorage
-  const savedEmail = localStorage.getItem('studentEmail');
-  const savedPassword = localStorage.getItem('studentPassword');
+  // Already saved? skip code
+  const savedEmail = localStorage.getItem(STORAGE_EMAIL);
+  const savedPassword = localStorage.getItem(STORAGE_PASSWORD);
 
-  if (savedEmail && savedPassword) {
+  if(savedEmail && savedPassword){
     if(savedEmail === email && savedPassword === password){
-      // Skip code step
       document.getElementById('login-step1').style.display = 'none';
       document.getElementById('book-content').style.display = 'block';
       return;
@@ -192,36 +192,79 @@ function stepOneLogin() {
   document.getElementById('login-step2').style.display = 'block';
 }
 
-// Step 2: Verify access code
-function verifyCode() {
-  const code = document.getElementById('access-code').value.toUpperCase();
-  const now = new Date().getTime();
-  const codeErrorEl = document.getElementById('code-error');
+// Random code generator
+function generateRandomCode(length = 8){
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+    let code = '';
+    for(let i=0; i<length; i++){
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return code;
+}
 
-  const valid = validCodes.find(c => c.code === code && c.expires > now);
-  if (valid) {
-    // Save student info permanently
+let currentCode = '';
+let canResend = true;
+let cooldown = 180; // 3 minutes
+
+function sendCode(){
+    if(!canResend) return;
+
     const email = localStorage.getItem('tempEmail');
-    const school = localStorage.getItem('tempSchool');
-    const password = localStorage.getItem('tempPassword');
-    localStorage.setItem('studentEmail', email);
-    localStorage.setItem('studentSchool', school);
-    localStorage.setItem('studentPassword', password);
+    if(!email){ alert("Email not set"); return; }
 
-    // Clear temp
-    localStorage.removeItem('tempEmail');
-    localStorage.removeItem('tempSchool');
-    localStorage.removeItem('tempPassword');
+    // Generate code
+    currentCode = generateRandomCode();
+    localStorage.setItem(STORAGE_CODE, currentCode);
 
-    document.getElementById('login-step2').style.display = 'none';
-    document.getElementById('book-content').style.display = 'block';
-  } else {
-    codeErrorEl.textContent = "Invalid or expired code. Contact your teacher for a new code.";
-  }
+    // Simulate sending email (replace this with EmailJS integration)
+    alert("Code sent to " + email + ": " + currentCode);
+
+    // Start 3-min cooldown
+    canResend = false;
+    const btn = document.getElementById('send-code-btn');
+    btn.disabled = true;
+    let timer = cooldown;
+    const timerEl = document.getElementById('timer');
+    const interval = setInterval(()=>{
+        timerEl.textContent = `Resend code available in ${timer}s`;
+        timer--;
+        if(timer<0){
+            clearInterval(interval);
+            timerEl.textContent = '';
+            btn.disabled = false;
+            canResend = true;
+        }
+    },1000);
+}
+
+// Verify code
+function verifyCode(){
+    const code = document.getElementById('access-code').value;
+    const savedCode = localStorage.getItem(STORAGE_CODE);
+    const codeErrorEl = document.getElementById('code-error');
+
+    if(code === savedCode){
+        // Save student info permanently
+        localStorage.setItem(STORAGE_EMAIL, localStorage.getItem('tempEmail'));
+        localStorage.setItem(STORAGE_PASSWORD, localStorage.getItem('tempPassword'));
+        localStorage.setItem(STORAGE_SCHOOL, localStorage.getItem('tempSchool'));
+
+        // Clear temp
+        localStorage.removeItem('tempEmail');
+        localStorage.removeItem('tempPassword');
+        localStorage.removeItem('tempSchool');
+        localStorage.removeItem(STORAGE_CODE);
+
+        document.getElementById('login-step2').style.display = 'none';
+        document.getElementById('book-content').style.display = 'block';
+    } else {
+        codeErrorEl.textContent = "Incorrect code. Try again.";
+    }
 }
 </script>
 
 </body>
 </html>
+
 
 
