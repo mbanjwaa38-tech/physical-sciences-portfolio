@@ -4,257 +4,128 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Excellence in Physical Sciences Teaching - Portfolio</title>
-<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Grotesk:wght@500;700&display=swap');
 
 :root {
---primary: #0f172a;
---accent: #06b6d4;
---accent-dark: #0891b2;
---secondary: #6366f1;
---success: #10b981;
---warning: #f59e0b;
---bg: #f8fafc;
---card: #ffffff;
---text: #1e293b;
---text-light: #64748b;
+  --primary: #0f172a;
+  --accent: #06b6d4;
+  --accent-dark: #0891b2;
+  --secondary: #6366f1;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --text: #1e293b;
+  --text-light: #64748b;
 }
 
-* {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
-}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter', sans-serif; background: var(--bg); color: var(--text); line-height:1.6; }
 
-body {
-font-family: 'Inter', sans-serif;
-background: var(--bg);
-color: var(--text);
-line-height: 1.6;
-overflow-x: hidden;
-}
-
-/* Animated Background */
-.bg-animation {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-z-index: -1;
-background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-}
-
-.bg-animation::before {
-content: '';
-position: absolute;
-width: 200%;
-height: 200%;
-background: radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 50%);
-animation: float 20s ease-in-out infinite;
-}
-
-@keyframes float {
-0%, 100% { transform: translate(0, 0) rotate(0deg); }
-50% { transform: translate(-50px, -50px) rotate(180deg); }
-}
-
-/* Header */
 header {
-background: rgba(15, 23, 42, 0.95);
-backdrop-filter: blur(10px);
-color: white;
-padding: 2rem 0;
-position: sticky;
-top: 0;
-z-index: 100;
-border-bottom: 2px solid var(--accent);
+  background: var(--primary); color:white; padding:2rem; text-align:center;
 }
+h1 { font-family:'Space Grotesk', sans-serif; font-size:2rem; }
+.subtitle { font-size:1rem; color:#94a3b8; margin-top:0.5rem; }
 
-.container {
-max-width: 1200px;
-margin: 0 auto;
-padding: 0 2rem;
-}
+main { padding:2rem; max-width:1200px; margin:0 auto; }
 
-.header-content {
-display: flex;
-justify-content: space-between;
-align-items: center;
-flex-wrap: wrap;
-gap: 1rem;
-}
+.section { margin-bottom:2rem; }
+.section h2 { color:var(--accent); margin-bottom:1rem; font-size:1.5rem; }
+.card { background: var(--card); padding:1.5rem; margin-bottom:1rem; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.card h3 { color:var(--primary); margin-bottom:0.5rem; }
+.card ul { list-style:none; padding-left:1rem; }
+.card li { padding:0.25rem 0; position:relative; }
+.card li::before { content:'▸'; position:absolute; left:-1rem; color:var(--accent); font-weight:bold; }
+</style>
+</head>
+<body>
 
-h1 {
-font-family: 'Space Grotesk', sans-serif;
-font-size: 2rem;
-background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-background-clip: text;
-}
+<header>
+<h1>Excellence in Physical Sciences Teaching</h1>
+<p class="subtitle">Portfolio</p>
+</header>
 
-.subtitle {
-color: #94a3b8;
-font-size: 0.9rem;
-margin-top: 0.5rem;
-}
+<main>
 
-/* Navigation */
-.nav-tabs {
-display: flex;
-gap: 0.5rem;
-flex-wrap: wrap;
-margin-top: 1rem;
-}
+<!-- Section 1 -->
+<section class="section">
+<h2>1. Learner-Centred Teaching</h2>
+<div class="card">
+<h3>Teaching Model</h3>
+<ul>
+<li>Diagnostic Assessments</li>
+<li>Conceptual Explanations</li>
+<li>Targeted Multimedia Resources</li>
+<li>Assessment Worksheets</li>
+</ul>
+</div>
+<div class="card">
+<h3>Creative Use of Resources</h3>
+<ul>
+<li>PhET Simulations</li>
+<li>Practical Demonstrations & Experiments</li>
+<li>VR Lab Activities</li>
+<li>Digital Quizzes</li>
+</ul>
+</div>
+</section>
 
-.nav-tab {
-padding: 0.5rem 1rem;
-background: rgba(255,255,255,0.1);
-border: 1px solid rgba(255,255,255,0.2);
-color: white;
-border-radius: 20px;
-cursor: pointer;
-transition: all 0.3s;
-font-size: 0.85rem;
-border: none;
-}
+<!-- Section 2 -->
+<section class="section">
+<h2>2. Promoting Physical Sciences</h2>
+<div class="card">
+<h3>Competitions & Outreach</h3>
+<ul>
+<li>Science Olympiads & Expos</li>
+<li>Extra Lessons & Enrichment Programs</li>
+<li>Educational Excursions</li>
+<li>University Outreach Programs</li>
+<li>STEM Mentor Programmes</li>
+</ul>
+</div>
+<div class="card">
+<h3>Enthusiasm & Motivation</h3>
+<ul>
+<li>Interactive Lessons</li>
+<li>STEM Awareness Initiatives</li>
+<li>Real-World Science Applications</li>
+<li>Career Guidance & Mentorship</li>
+</ul>
+</div>
+</section>
 
-.nav-tab:hover, .nav-tab.active {
-background: var(--accent);
-transform: translateY(-2px);
-box-shadow: 0 4px 12px rgba(6,182,212,0.3);
-}
+<!-- Section 3 -->
+<section class="section">
+<h2>3. Professional Development & Leadership</h2>
+<div class="card">
+<h3>Subject Competence</h3>
+<ul>
+<li>Alignment of Lesson Plans with National Standards</li>
+<li>Practical Experiments & Intervention Materials</li>
+<li>Content Workshops & ICT Tools</li>
+</ul>
+</div>
+<div class="card">
+<h3>Lifelong Learning</h3>
+<ul>
+<li>Ongoing Postgraduate Studies</li>
+<li>Curriculum & Content Workshops</li>
+<li>Professional Learning Communities</li>
+<li>Examiner Roles & Moderation</li>
+</ul>
+</div>
+<div class="card">
+<h3>Activities Beyond the Classroom</h3>
+<ul>
+<li>Science Competitions & Olympiads</li>
+<li>Educational Excursions</li>
+<li>Tutoring & Extra Lessons</li>
+<li>STEM Mentorship Programs</li>
+</ul>
+</div>
+</section>
 
-/* Main Content */
-main {
-padding: 3rem 0;
-position: relative;
-}
+</main>
+</body>
+</html>
 
-.section {
-display: none;
-animation: fadeIn 0.5s ease;
-}
-
-.section.active {
-display: block;
-}
-
-@keyframes fadeIn {
-from { opacity: 0; transform: translateY(20px); }
-to { opacity: 1; transform: translateY(0); }
-}
-
-/* Cards */
-.grid {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-gap: 2rem;
-margin-top: 2rem;
-}
-
-.card {
-background: var(--card);
-border-radius: 16px;
-padding: 2rem;
-box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-transition: all 0.3s;
-border: 1px solid rgba(255,255,255,0.1);
-position: relative;
-overflow: hidden;
-}
-
-.card::before {
-content: '';
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 4px;
-background: linear-gradient(90deg, var(--accent), var(--secondary));
-transform: scaleX(0);
-transition: transform 0.3s;
-}
-
-.card:hover {
-transform: translateY(-5px);
-box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
-}
-
-.card:hover::before {
-transform: scaleX(1);
-}
-
-.card-header {
-display: flex;
-align-items: center;
-gap: 1rem;
-margin-bottom: 1rem;
-}
-
-.icon {
-width: 50px;
-height: 50px;
-background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
-border-radius: 12px;
-display: flex;
-align-items: center;
-justify-content: center;
-color: white;
-font-size: 1.5rem;
-flex-shrink: 0;
-}
-
-.card h3 {
-font-family: 'Space Grotesk', sans-serif;
-color: var(--primary);
-font-size: 1.25rem;
-}
-
-.card-meta {
-color: var(--accent-dark);
-font-size: 0.85rem;
-font-weight: 600;
-text-transform: uppercase;
-letter-spacing: 0.5px;
-margin-bottom: 0.5rem;
-}
-
-.card ul {
-list-style: none;
-margin-top: 1rem;
-}
-
-.card li {
-padding: 0.5rem 0;
-padding-left: 1.5rem;
-position: relative;
-color: var(--text-light);
-font-size: 0.95rem;
-}
-
-.card li::before {
-content: '▸';
-position: absolute;
-left: 0;
-color: var(--accent);
-font-weight: bold;
-}
-
-/* Grade Specific Styles */
-.grade-badge {
-display: inline-block;
-padding: 0.25rem 0.75rem;
-border-radius: 20px;
-font-size: 0.75rem;
-font-weight: 700;
-margin-right: 0.5rem;
-}
-
-.grade-10 { background: #dbeafe; color: #1e40af; }
-.grade-11 { background: #dcfce7; color: #166534; }
-.grade-12 { background: #fef3c7; color: #92400e; }
-.all-grades { background: #f3e8ff; color
