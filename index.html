@@ -39,6 +39,13 @@ button { cursor:pointer; background:var(--accent); color:white; border:none; bor
 .card li::before { content:'▸'; position:absolute; left:-1rem; color:var(--accent); font-weight:bold; }
 #error, #code-error, #timer { color:red; margin-top:0.5rem; }
 </style>
+
+<!-- EmailJS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+  // Initialize EmailJS with your public key
+  emailjs.init("_6kozn-J9-QGCchMe");
+</script>
 </head>
 <body>
 
@@ -157,6 +164,10 @@ const STORAGE_PASSWORD = 'studentPassword';
 const STORAGE_SCHOOL = 'studentSchool';
 const STORAGE_CODE = 'studentCode';
 
+let currentCode = '';
+let canResend = true;
+let cooldown = 180; // 3 minutes
+
 // Step 1 login
 function stepOneLogin() {
   const email = document.getElementById('email').value;
@@ -169,7 +180,6 @@ function stepOneLogin() {
     return;
   }
 
-  // Already saved? skip code
   const savedEmail = localStorage.getItem(STORAGE_EMAIL);
   const savedPassword = localStorage.getItem(STORAGE_PASSWORD);
 
@@ -192,34 +202,46 @@ function stepOneLogin() {
   document.getElementById('login-step2').style.display = 'block';
 }
 
-// Random code generator
+// Generate 8-character random code
 function generateRandomCode(length = 8){
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
-    let code = '';
-    for(let i=0; i<length; i++){
-        code += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return code;
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+  let code = '';
+  for(let i=0;i<length;i++){
+    code += chars.charAt(Math.floor(Math.random()*chars.length));
+  }
+  return code;
 }
 
-let currentCode = '';
-let canResend = true;
-let cooldown = 180; // 3 minutes
-
+// Send code via EmailJS
 function sendCode(){
-    if(!canResend) return;
+  if(!canResend) return;
 
-    const email = localStorage.getItem('tempEmail');
-    if(!email){ alert("Email not set"); return; }
+  const studentEmail = localStorage.getItem('tempEmail');
+  if(!studentEmail){ alert("Email not set"); return; }
 
-    // Generate code
-    currentCode = generateRandomCode();
-    localStorage.setItem(STORAGE_CODE, currentCode);
+  currentCode = generateRandomCode();
+  localStorage.setItem(STORAGE_CODE, currentCode);
 
-    // Simulate sending email (replace this with EmailJS integration)
-    alert("Code sent to " + email + ": " + currentCode);
+  const serviceID = "service_ah9oypr";   // Your Service ID
+  const templateID = "template_0qg4mop"; // Your Template ID
 
-    // Start 3-min cooldown
+  const templateParams = {
+      to_email: studentEmail,
+      code: currentCode
+  };
+
+  emailjs.send(serviceID, templateID, templateParams)
+    .then(() => {
+        alert("Code sent to: " + studentEmail);
+        startCooldown();
+    }, (err) => {
+        alert("Failed to send email. Check EmailJS setup.");
+        console.error(err);
+    });
+}
+
+// 3-minute resend timer
+function startCooldown(){
     canResend = false;
     const btn = document.getElementById('send-code-btn');
     btn.disabled = true;
@@ -228,7 +250,7 @@ function sendCode(){
     const interval = setInterval(()=>{
         timerEl.textContent = `Resend code available in ${timer}s`;
         timer--;
-        if(timer<0){
+        if(timer < 0){
             clearInterval(interval);
             timerEl.textContent = '';
             btn.disabled = false;
@@ -239,32 +261,31 @@ function sendCode(){
 
 // Verify code
 function verifyCode(){
-    const code = document.getElementById('access-code').value;
-    const savedCode = localStorage.getItem(STORAGE_CODE);
-    const codeErrorEl = document.getElementById('code-error');
+  const code = document.getElementById('access-code').value;
+  const savedCode = localStorage.getItem(STORAGE_CODE);
+  const codeErrorEl = document.getElementById('code-error');
 
-    if(code === savedCode){
-        // Save student info permanently
-        localStorage.setItem(STORAGE_EMAIL, localStorage.getItem('tempEmail'));
-        localStorage.setItem(STORAGE_PASSWORD, localStorage.getItem('tempPassword'));
-        localStorage.setItem(STORAGE_SCHOOL, localStorage.getItem('tempSchool'));
+  if(code === savedCode){
+    localStorage.setItem(STORAGE_EMAIL, localStorage.getItem('tempEmail'));
+    localStorage.setItem(STORAGE_PASSWORD, localStorage.getItem('tempPassword'));
+    localStorage.setItem(STORAGE_SCHOOL, localStorage.getItem('tempSchool'));
 
-        // Clear temp
-        localStorage.removeItem('tempEmail');
-        localStorage.removeItem('tempPassword');
-        localStorage.removeItem('tempSchool');
-        localStorage.removeItem(STORAGE_CODE);
+    // Clear temp
+    localStorage.removeItem('tempEmail');
+    localStorage.removeItem('tempPassword');
+    localStorage.removeItem('tempSchool');
+    localStorage.removeItem(STORAGE_CODE);
 
-        document.getElementById('login-step2').style.display = 'none';
-        document.getElementById('book-content').style.display = 'block';
-    } else {
-        codeErrorEl.textContent = "Incorrect code. Try again.";
-    }
+    document.getElementById('login-step2').style.display = 'none';
+    document.getElementById('book-content').style.display = 'block';
+  } else {
+    codeErrorEl.textContent = "Incorrect code. Try again.";
+  }
 }
 </script>
-
 </body>
 </html>
+
 
 
 
