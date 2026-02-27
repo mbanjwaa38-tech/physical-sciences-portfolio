@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Excellence in Physical Sciences Teaching - Portfolio</title>
+<title>Grade 12 Physical Science Portal</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Grotesk:wght@500;700&display=swap');
 
@@ -21,33 +21,57 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Inter', sans-serif; background: var(--bg); color: var(--text); line-height:1.6; }
 
-header {
-  background: var(--primary); color:white; padding:2rem; text-align:center;
-}
+header { background: var(--primary); color:white; padding:2rem; text-align:center; }
 h1 { font-family:'Space Grotesk', sans-serif; font-size:2rem; }
 .subtitle { font-size:1rem; color:#94a3b8; margin-top:0.5rem; }
 
 main { padding:2rem; max-width:1200px; margin:0 auto; }
+input, button { padding:0.5rem; margin:0.5rem 0; width:100%; max-width:300px; }
+button { cursor:pointer; background:var(--accent); color:white; border:none; border-radius:5px; }
 
-.section { margin-bottom:2rem; }
-.section h2 { color:var(--accent); margin-bottom:1rem; font-size:1.5rem; }
+#login-step1, #login-step2, #book-content { margin-top:2rem; }
+#login-step2, #book-content { display:none; }
+
 .card { background: var(--card); padding:1.5rem; margin-bottom:1rem; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
 .card h3 { color:var(--primary); margin-bottom:0.5rem; }
 .card ul { list-style:none; padding-left:1rem; }
 .card li { padding:0.25rem 0; position:relative; }
 .card li::before { content:'▸'; position:absolute; left:-1rem; color:var(--accent); font-weight:bold; }
+#error, #code-error { color:red; margin-top:0.5rem; }
+
 </style>
 </head>
 <body>
 
 <header>
 <h1>Excellence in Physical Sciences Teaching</h1>
-<p class="subtitle">Portfolio</p>
+<p class="subtitle">Digital Portfolio</p>
 </header>
 
 <main>
 
-<!-- Section 1 -->
+<!-- Step 1: Student Info -->
+<div id="login-step1">
+  <h2>Step 1: Enter Your Details</h2>
+  <input type="email" id="email" placeholder="Email"><br>
+  <input type="text" id="school" placeholder="School"><br>
+  <input type="password" id="password" placeholder="Password"><br>
+  <button onclick="stepOneLogin()">Next</button>
+  <p id="error"></p>
+</div>
+
+<!-- Step 2: Access Code -->
+<div id="login-step2">
+  <h2>Step 2: Enter Access Code</h2>
+  <input type="text" id="access-code" placeholder="Access Code"><br>
+  <button onclick="verifyCode()">Unlock Book</button>
+  <p id="code-error"></p>
+</div>
+
+<!-- Book Content -->
+<div id="book-content">
+<h2>Solutions for All - Grade 12 Physical Sciences</h2>
+
 <section class="section">
 <h2>1. Learner-Centred Teaching</h2>
 <div class="card">
@@ -70,7 +94,6 @@ main { padding:2rem; max-width:1200px; margin:0 auto; }
 </div>
 </section>
 
-<!-- Section 2 -->
 <section class="section">
 <h2>2. Promoting Physical Sciences</h2>
 <div class="card">
@@ -94,7 +117,6 @@ main { padding:2rem; max-width:1200px; margin:0 auto; }
 </div>
 </section>
 
-<!-- Section 3 -->
 <section class="section">
 <h2>3. Professional Development & Leadership</h2>
 <div class="card">
@@ -125,7 +147,81 @@ main { padding:2rem; max-width:1200px; margin:0 auto; }
 </div>
 </section>
 
-</main>
+</div>
+
+<script>
+// Pre-generated access codes with 24h expiry
+let validCodes = [
+  {code:'PS2026-001', expires: new Date().getTime() + 24*60*60*1000},
+  {code:'PS2026-002', expires: new Date().getTime() + 24*60*60*1000}
+];
+
+// Step 1 login (first time or returning)
+function stepOneLogin() {
+  const email = document.getElementById('email').value;
+  const school = document.getElementById('school').value;
+  const password = document.getElementById('password').value;
+  const errorEl = document.getElementById('error');
+
+  if (!email || !school || !password) {
+    errorEl.textContent = "All fields are required.";
+    return;
+  }
+
+  // Check if user info already stored in localStorage
+  const savedEmail = localStorage.getItem('studentEmail');
+  const savedPassword = localStorage.getItem('studentPassword');
+
+  if (savedEmail && savedPassword) {
+    if(savedEmail === email && savedPassword === password){
+      // Skip code step
+      document.getElementById('login-step1').style.display = 'none';
+      document.getElementById('book-content').style.display = 'block';
+      return;
+    } else {
+      errorEl.textContent = "Incorrect email or password.";
+      return;
+    }
+  }
+
+  // First-time login: show code step
+  localStorage.setItem('tempEmail', email);
+  localStorage.setItem('tempSchool', school);
+  localStorage.setItem('tempPassword', password);
+  document.getElementById('login-step1').style.display = 'none';
+  document.getElementById('login-step2').style.display = 'block';
+}
+
+// Step 2: Verify access code
+function verifyCode() {
+  const code = document.getElementById('access-code').value.toUpperCase();
+  const now = new Date().getTime();
+  const codeErrorEl = document.getElementById('code-error');
+
+  const valid = validCodes.find(c => c.code === code && c.expires > now);
+  if (valid) {
+    // Save student info permanently
+    const email = localStorage.getItem('tempEmail');
+    const school = localStorage.getItem('tempSchool');
+    const password = localStorage.getItem('tempPassword');
+    localStorage.setItem('studentEmail', email);
+    localStorage.setItem('studentSchool', school);
+    localStorage.setItem('studentPassword', password);
+
+    // Clear temp
+    localStorage.removeItem('tempEmail');
+    localStorage.removeItem('tempSchool');
+    localStorage.removeItem('tempPassword');
+
+    document.getElementById('login-step2').style.display = 'none';
+    document.getElementById('book-content').style.display = 'block';
+  } else {
+    codeErrorEl.textContent = "Invalid or expired code. Contact your teacher for a new code.";
+  }
+}
+</script>
+
 </body>
 </html>
+
 
