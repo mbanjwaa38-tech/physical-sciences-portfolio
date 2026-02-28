@@ -1,151 +1,198 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Grade 12 Physical Sciences Portal</title>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 12 Physical Science Portal</title>
 
-  <style>
-    body {
-      font-family: Arial;
-      text-align: center;
-      background: #0d1117;
-      color: white;
-    }
+<style>
+body {
+  font-family: Arial;
+  background:#f4f6f9;
+  text-align:center;
+}
+input, button {
+  padding:10px;
+  margin:5px;
+  width:250px;
+}
+button {
+  background:#06b6d4;
+  border:none;
+  color:white;
+  cursor:pointer;
+}
+#login-step2, #content {
+  display:none;
+}
+iframe {
+  width:90%;
+  height:600px;
+  border:none;
+  margin-top:20px;
+}
+</style>
 
-    .box {
-      margin: 20px auto;
-      padding: 20px;
-      width: 300px;
-      background: #161b22;
-      border-radius: 10px;
-    }
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+emailjs.init("_6kozn-J9-QGCchMe");
+</script>
 
-    input {
-      margin: 5px;
-      padding: 8px;
-      width: 90%;
-    }
-
-    button {
-      padding: 10px;
-      margin-top: 10px;
-      background: #238636;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    #books {
-      display: none;
-      margin-top: 30px;
-    }
-
-    iframe {
-      width: 90%;
-      height: 500px;
-      margin-top: 20px;
-      border-radius: 10px;
-    }
-  </style>
 </head>
-
 <body>
 
-<h1>📘 Physical Sciences Portal</h1>
+<h1>Physical Science Portal</h1>
 
-<div class="box" id="loginBox">
-  <h3>Student Login</h3>
-  <input type="email" id="email" placeholder="Enter Email">
-  <input type="password" id="password" placeholder="Enter Password">
-  <button onclick="sendCode()">Send Code</button>
+<!-- LOGIN / SIGNUP -->
+<div id="login-step1">
+<h2>Sign Up / Log In</h2>
 
-  <div id="codeBox" style="display:none;">
-    <input type="text" id="code" placeholder="Enter Verification Code">
-    <button onclick="verifyCode()">Verify</button>
-    <p id="timer"></p>
-  </div>
+<input type="email" id="email" placeholder="Email"><br>
+<input type="password" id="password" placeholder="Password"><br>
+
+<button onclick="signUp()">Sign Up</button>
+<button onclick="logIn()">Log In</button>
+
+<p id="error"></p>
 </div>
 
-<div id="books">
-  <h2>📚 Study Materials</h2>
+<!-- CODE VERIFICATION -->
+<div id="login-step2">
+<h2>Enter Access Code</h2>
 
-  <h3>Physics Paper 1</h3>
-  <iframe src="physics-paper1.pdf"></iframe>
+<input type="text" id="code" placeholder="Enter Code"><br>
 
-  <h3>Chemistry Paper 2</h3>
-  <iframe src="chemistry-paper2.pdf"></iframe>
+<button id="sendBtn" onclick="sendCode()">Send Code</button>
+<button onclick="verifyCode()">Verify Code</button>
+
+<p id="timer"></p>
+<p id="codeError"></p>
+</div>
+
+<!-- CONTENT -->
+<div id="content">
+<h2>Physics Paper 1</h2>
+<iframe src="physics-paper1.pdf"></iframe>
+
+<h2>Chemistry Paper 2</h2>
+<iframe src="chemistry-paper2.pdf"></iframe>
 </div>
 
 <script>
 
-emailjs.init("_6kozn-J9-QGCchMe");
+let users = JSON.parse(localStorage.getItem("users") || "[]");
+let currentCode = "";
+let cooldown = false;
 
-let generatedCode = "";
-let timerInterval;
+// SIGN UP
+function signUp(){
+let email = document.getElementById("email").value;
+let password = document.getElementById("password").value;
 
-function sendCode() {
-
-    let email = document.getElementById("email").value;
-
-    if(email == "") {
-        alert("Enter email first");
-        return;
-    }
-
-    generatedCode = Math.random().toString(36).substring(2,10).toUpperCase();
-
-    alert("Your login code is: " + generatedCode);
-
-    emailjs.send("service_ah9oypr","template_0qg4mop",{
-        to_email: email,
-        passcode: generatedCode
-    });
-
-    document.getElementById("codeBox").style.display = "block";
-
-    startTimer();
+if(!email || !password){
+document.getElementById("error").innerText="Fill all fields";
+return;
 }
 
-function startTimer() {
-    let timeLeft = 180;
-
-    timerInterval = setInterval(() => {
-        document.getElementById("timer").innerText =
-        "Resend available in: " + timeLeft + " seconds";
-
-        timeLeft--;
-
-        if(timeLeft < 0){
-            clearInterval(timerInterval);
-            document.getElementById("timer").innerText =
-            "You can resend a new code now.";
-        }
-    },1000);
+if(users.find(u=>u.email===email)){
+document.getElementById("error").innerText="Email already exists";
+return;
 }
 
+localStorage.setItem("tempUser", JSON.stringify({email,password}));
+
+document.getElementById("login-step1").style.display="none";
+document.getElementById("login-step2").style.display="block";
+}
+
+// LOGIN
+function logIn(){
+let email = document.getElementById("email").value;
+let password = document.getElementById("password").value;
+
+let user = users.find(u=>u.email===email && u.password===password);
+
+if(user){
+document.getElementById("login-step1").style.display="none";
+document.getElementById("content").style.display="block";
+}else{
+document.getElementById("error").innerText="Incorrect login";
+}
+}
+
+// GENERATE CODE
+function generateCode(){
+let chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%";
+let code="";
+for(let i=0;i<8;i++){
+code+=chars[Math.floor(Math.random()*chars.length)];
+}
+return code;
+}
+
+// SEND CODE
+function sendCode(){
+if(cooldown) return;
+
+let tempUser = JSON.parse(localStorage.getItem("tempUser"));
+if(!tempUser) return;
+
+currentCode = generateCode();
+localStorage.setItem("tempCode", currentCode);
+
+emailjs.send("service_ah9oypr","template_0qg4mop",{
+to_email: tempUser.email,
+code: currentCode
+})
+.then(()=> alert("Code sent to email"))
+.catch(()=> alert("Email failed but code shown"));
+
+alert("Your code: "+currentCode);
+
+startTimer();
+}
+
+// TIMER
+function startTimer(){
+cooldown=true;
+let time=180;
+let timer=document.getElementById("timer");
+
+let interval=setInterval(()=>{
+timer.innerText="Resend in "+time+"s";
+time--;
+
+if(time<0){
+clearInterval(interval);
+cooldown=false;
+timer.innerText="";
+}
+},1000);
+}
+
+// VERIFY CODE
 function verifyCode(){
+let input=document.getElementById("code").value;
+let saved=localStorage.getItem("tempCode");
+let tempUser=JSON.parse(localStorage.getItem("tempUser"));
 
-    let enteredCode = document.getElementById("code").value;
+if(input===saved){
+users.push(tempUser);
+localStorage.setItem("users", JSON.stringify(users));
 
-    if(enteredCode === generatedCode){
+document.getElementById("login-step2").style.display="none";
+document.getElementById("content").style.display="block";
 
-        localStorage.setItem("studentEmail", document.getElementById("email").value);
-        localStorage.setItem("studentPass", document.getElementById("password").value);
-
-        alert("Login Successful ✅");
-
-        document.getElementById("loginBox").style.display = "none";
-        document.getElementById("books").style.display = "block";
-
-    } else {
-        alert("Wrong Code ❌");
-    }
+}else{
+document.getElementById("codeError").innerText="Wrong code";
+}
 }
 
 </script>
 
 </body>
 </html>
+
 
 
 
