@@ -13,6 +13,20 @@ body {
     color:white;
 }
 
+/* Website Heading */
+.header {
+    position:absolute;
+    top:0;
+    width:100%;
+    text-align:center;
+    padding:15px;
+    font-size:28px;
+    font-weight:bold;
+    background:rgba(0,0,0,0.3);
+    backdrop-filter: blur(8px);
+    z-index:10;
+}
+
 /* Animated Background */
 .background {
     position:fixed;
@@ -55,6 +69,13 @@ body {
     transform:translate(-50%,-50%);
 }
 
+/* Motivational Note */
+.motivation {
+    font-size:14px;
+    margin-bottom:15px;
+    color:#b0e0ff;
+}
+
 input {
     width:90%;
     padding:12px;
@@ -78,7 +99,6 @@ button {
     display:none;
     height:100vh;
     width:100%;
-    overflow:auto;
 }
 
 /* Navigation */
@@ -86,23 +106,25 @@ button {
     position:absolute;
     top:20px;
     right:20px;
-    z-index:5;
 }
 .nav button {
     margin-left:10px;
-    font-size:16px;
 }
 
-/* Paper Section */
-.paper-section {
-    display:none;
-    width:100%;
+/* Slider */
+.slider {
+    display:flex;
+    width:200%;
     height:100%;
+    transition:0.5s;
+}
+
+.slide {
+    width:50%;
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:flex-start;
-    padding-top:80px;
+    justify-content:center;
 }
 
 .paper-btn {
@@ -127,84 +149,144 @@ iframe {
     border:none;
 }
 </style>
-</head>
 
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+emailjs.init("_6kozn-J9-QGCchMe"); // Your EmailJS Public Key
+</script>
+
+</head>
 <body>
 
 <div class="background"></div>
+
+<div class="header">SCIENCE PAPERS PORTAL</div>
 
 <!-- Floating Icons -->
 <img src="https://cdn-icons-png.flaticon.com/512/4149/4149676.png" class="floating" style="left:10%; animation-duration:18s;">
 <img src="https://cdn-icons-png.flaticon.com/512/2940/2940402.png" class="floating" style="left:40%; animation-duration:22s;">
 <img src="https://cdn-icons-png.flaticon.com/512/2784/2784487.png" class="floating" style="left:70%; animation-duration:25s;">
 
-<!-- Login -->
+<!-- Login Card -->
 <div class="card" id="loginCard">
-<h2>Student Login</h2>
-<input type="email" id="user" placeholder="Enter Email">
-<input type="password" id="pass" placeholder="Password">
-<button onclick="login()">Login</button>
-<br><br>
-<button onclick="signup()">Sign Up</button>
+    <div class="motivation">Unlock your potential in Physics & Chemistry. Your journey starts here!</div>
+    <h2>Student Login</h2>
+    <input type="email" id="user" placeholder="Enter Email">
+    <input type="password" id="pass" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <br><br>
+    <button onclick="signup()">Sign Up</button>
 </div>
 
 <!-- Dashboard -->
 <div class="dashboard" id="dash">
+    <div class="nav">
+        <button onclick="showPhysics()">Physics</button>
+        <button onclick="showChem()">Chemistry</button>
+    </div>
 
-<div class="nav">
-<button onclick="showPaper('physics')">Physics</button>
-<button onclick="showPaper('chemistry')">Chemistry</button>
-</div>
-
-<!-- Physics Paper -->
-<div id="physics" class="paper-section">
-<h1>Physics Paper 1</h1>
-<button class="paper-btn" onclick="loadPDF('physics-paper1.pdf','pdfFramePhysics')">Open Paper</button>
-<div class="pdf-viewer">
-<iframe id="pdfFramePhysics"></iframe>
-</div>
-</div>
-
-<!-- Chemistry Paper -->
-<div id="chemistry" class="paper-section">
-<h1>Chemistry Paper 2</h1>
-<button class="paper-btn" onclick="loadPDF('chemistry-paper2.pdf','pdfFrameChem')">Open Paper</button>
-<div class="pdf-viewer">
-<iframe id="pdfFrameChem"></iframe>
-</div>
-</div>
-
+    <div class="slider" id="slider">
+        <!-- Physics -->
+        <div class="slide">
+            <h1>Physics Paper 1</h1>
+            <button class="paper-btn" onclick="loadPDF('physics-paper1.pdf')">Open Paper</button>
+            <div class="pdf-viewer">
+                <iframe id="pdfFrame"></iframe>
+            </div>
+        </div>
+        <!-- Chemistry -->
+        <div class="slide">
+            <h1>Chemistry Paper 2</h1>
+            <button class="paper-btn" onclick="loadPDF('chemistry-paper2.pdf')">Open Paper</button>
+            <div class="pdf-viewer">
+                <iframe id="pdfFrame2"></iframe>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-let currentPaper = 'physics'; // Track active paper
+// USERS storage
+let users = JSON.parse(localStorage.getItem("users")||"[]");
+let tempUser = null;
+let currentCode = '';
+let cooldown = false;
 
+// Sign Up
+function signup(){
+    let email = document.getElementById('user').value;
+    let pass = document.getElementById('pass').value;
+    if(!email || !pass){ alert("Enter email and password"); return; }
+
+    if(users.some(u=>u.email===email)){
+        alert("Email already registered. Please login");
+        return;
+    }
+
+    tempUser = {email, pass};
+    currentCode = generateCode();
+    localStorage.setItem("tempCode", currentCode);
+
+    // Send code via EmailJS
+    emailjs.send("service_ah9oypr","template_0qg4mop",{
+        to_email: email,
+        code: currentCode
+    }).then(()=>{alert("Verification code sent! Check your email.");})
+      .catch(err=>{alert("Failed to send email"); console.error(err);});
+
+    // Show prompt for code input
+    let userCode = prompt("Enter the verification code sent to your email:");
+    if(userCode===currentCode){
+        users.push(tempUser);
+        localStorage.setItem("users", JSON.stringify(users));
+        loginAfterVerification();
+    } else {
+        alert("Incorrect code. Sign up again.");
+        tempUser = null;
+        currentCode = '';
+    }
+}
+
+// Login
 function login(){
+    let email = document.getElementById('user').value;
+    let pass = document.getElementById('pass').value;
+    let user = users.find(u=>u.email===email && u.pass===pass);
+    if(user){ loginAfterVerification(); }
+    else { alert("Email or password incorrect."); }
+}
+
+// After verification or successful login
+function loginAfterVerification(){
     document.getElementById('loginCard').style.display='none';
     document.getElementById('dash').style.display='block';
-    showPaper('physics'); // Show Physics by default
 }
 
-function signup(){
-    alert('Account created! Please login');
+// Slide Navigation
+function showPhysics(){ document.getElementById('slider').style.transform='translateX(0%)'; }
+function showChem(){ document.getElementById('slider').style.transform='translateX(-50%)'; }
+
+// Load PDF inside page
+function loadPDF(file){
+    if(document.getElementById('slider').style.transform==='translateX(-50%)'){
+        document.getElementById('pdfFrame2').src=file;
+    } else {
+        document.getElementById('pdfFrame').src=file;
+    }
 }
 
-// Show paper by id
-function showPaper(paper){
-    currentPaper = paper;
-    document.getElementById('physics').style.display='none';
-    document.getElementById('chemistry').style.display='none';
-    document.getElementById(paper).style.display='flex';
-}
-
-// Load PDF inside proper iframe
-function loadPDF(file, frameId){
-    document.getElementById(frameId).src = file;
+// Generate random 8-character code
+function generateCode(){
+    let chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+    let code="";
+    for(let i=0;i<8;i++){ code+=chars.charAt(Math.floor(Math.random()*chars.length)); }
+    return code;
 }
 </script>
 
 </body>
 </html>
+
 
 
 
