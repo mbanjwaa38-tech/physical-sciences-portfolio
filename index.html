@@ -13,7 +13,7 @@ body {
     color:white;
 }
 
-/* Header */
+/* Website Heading */
 .header {
     position:absolute;
     top:0;
@@ -95,17 +95,6 @@ button {
     overflow:hidden;
 }
 
-/* Welcome Section */
-.welcome {
-    text-align:center;
-    margin-top:100px;
-    font-size:22px;
-    max-width:600px;
-    margin-left:auto;
-    margin-right:auto;
-    line-height:1.6;
-}
-
 /* Navigation */
 .nav {
     position:absolute;
@@ -126,7 +115,7 @@ button {
     flex-direction:column;
     align-items:center;
     justify-content:flex-start;
-    padding-top:80px;
+    padding-top:100px;
 }
 
 .paper-btn {
@@ -184,22 +173,6 @@ SCIENCE PAPERS PORTAL
 <button onclick="showPaper('chemistry')">Chemistry</button>
 </div>
 
-<!-- Welcome -->
-<div class="welcome" id="welcomeBox">
-<h2>Welcome to the Science Portal</h2>
-<p>
-Where curiosity meets calculation.<br>
-Where formulas become understanding.<br>
-And where future scientists sharpen their edge.<br><br>
-
-Dive into Paper 1.<br>
-Master Paper 2.<br>
-Build the mindset that solves the universe.<br><br>
-
-Your journey into precision starts now.
-</p>
-</div>
-
 <!-- Paper Sections -->
 <div id="physics" class="paper-section">
 <h1>Physics Paper 1</h1>
@@ -223,21 +196,22 @@ Your journey into precision starts now.
 function login(){
     document.getElementById('loginCard').style.display='none';
     document.getElementById('dash').style.display='block';
+    // Show Physics by default
+    showPaper('physics');
 }
 
 function signup(){
     alert('Account created! Please login');
 }
 
-// Show a paper and hide others
+// Show selected paper and hide the other
 function showPaper(subject){
-    document.getElementById('welcomeBox').style.display='none';
     document.getElementById('physics').style.display='none';
     document.getElementById('chemistry').style.display='none';
     document.getElementById(subject).style.display='flex';
 }
 
-// Load PDF inside iframe
+// Load PDF in iframe
 function loadPDF(file, frameId){
     document.getElementById(frameId).src=file;
 }
@@ -245,6 +219,7 @@ function loadPDF(file, frameId){
 
 </body>
 </html>
+
 
 
 
