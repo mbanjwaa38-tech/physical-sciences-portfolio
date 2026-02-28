@@ -11,25 +11,59 @@ body {
   background:#f4f6f9;
   text-align:center;
 }
+
 input, button {
   padding:10px;
   margin:5px;
   width:250px;
 }
+
 button {
   background:#06b6d4;
   border:none;
   color:white;
   cursor:pointer;
 }
-#login-step2, #content {
+
+#signupBox, #loginBox, #verifyBox, #portal {
   display:none;
 }
-iframe {
+
+/* Subject Tabs */
+.tabs {
+  display:flex;
+  justify-content:center;
+  margin-top:20px;
+}
+
+.tab-btn {
+  padding:12px 25px;
+  margin:5px;
+  background:#0f172a;
+  color:white;
+  cursor:pointer;
+}
+
+.viewer {
   width:90%;
   height:600px;
+  margin:20px auto;
+  overflow:hidden;
+  position:relative;
+}
+
+.slide {
+  display:none;
+}
+
+.slide.active {
+  display:block;
+}
+
+iframe {
+  width:100%;
+  height:600px;
   border:none;
-  margin-top:20px;
 }
 </style>
 
@@ -43,84 +77,102 @@ emailjs.init("_6kozn-J9-QGCchMe");
 
 <h1>Physical Science Portal</h1>
 
-<!-- LOGIN / SIGNUP -->
-<div id="login-step1">
-<h2>Sign Up / Log In</h2>
-
-<input type="email" id="email" placeholder="Email"><br>
-<input type="password" id="password" placeholder="Password"><br>
-
-<button onclick="signUp()">Sign Up</button>
-<button onclick="logIn()">Log In</button>
-
-<p id="error"></p>
+<!-- HOME OPTIONS -->
+<div id="home">
+  <button onclick="showSignup()">Sign Up</button>
+  <button onclick="showLogin()">Log In</button>
 </div>
 
-<!-- CODE VERIFICATION -->
-<div id="login-step2">
-<h2>Enter Access Code</h2>
+<!-- SIGNUP -->
+<div id="signupBox">
+<h2>Sign Up</h2>
+<input type="email" id="suEmail" placeholder="Email"><br>
+<input type="password" id="suPass" placeholder="Password"><br>
+<button onclick="signUp()">Continue</button>
+</div>
 
-<input type="text" id="code" placeholder="Enter Code"><br>
+<!-- LOGIN -->
+<div id="loginBox">
+<h2>Log In</h2>
+<input type="email" id="liEmail" placeholder="Email"><br>
+<input type="password" id="liPass" placeholder="Password"><br>
+<button onclick="logIn()">Login</button>
+<p id="loginError"></p>
+</div>
 
-<button id="sendBtn" onclick="sendCode()">Send Code</button>
-<button onclick="verifyCode()">Verify Code</button>
-
+<!-- VERIFY -->
+<div id="verifyBox">
+<h2>Enter Code</h2>
+<input type="text" id="code"><br>
+<button onclick="sendCode()">Send Code</button>
+<button onclick="verifyCode()">Verify</button>
 <p id="timer"></p>
 <p id="codeError"></p>
 </div>
 
-<!-- CONTENT -->
-<div id="content">
-<h2>Physics Paper 1</h2>
-<iframe src="physics-paper1.pdf"></iframe>
+<!-- PORTAL -->
+<div id="portal">
 
-<h2>Chemistry Paper 2</h2>
-<iframe src="chemistry-paper2.pdf"></iframe>
+<div class="tabs">
+  <div class="tab-btn" onclick="showSlide('physics')">Physics</div>
+  <div class="tab-btn" onclick="showSlide('chemistry')">Chemistry</div>
+</div>
+
+<div class="viewer">
+  <div id="physics" class="slide active">
+    <iframe src="physics-paper1.pdf"></iframe>
+  </div>
+
+  <div id="chemistry" class="slide">
+    <iframe src="chemistry-paper2.pdf"></iframe>
+  </div>
+</div>
+
 </div>
 
 <script>
 
 let users = JSON.parse(localStorage.getItem("users") || "[]");
-let currentCode = "";
-let cooldown = false;
+let currentCode="";
+let cooldown=false;
 
-// SIGN UP
+function showSignup(){
+document.getElementById("home").style.display="none";
+document.getElementById("signupBox").style.display="block";
+}
+
+function showLogin(){
+document.getElementById("home").style.display="none";
+document.getElementById("loginBox").style.display="block";
+}
+
+// SIGNUP
 function signUp(){
-let email = document.getElementById("email").value;
-let password = document.getElementById("password").value;
+let email=document.getElementById("suEmail").value;
+let pass=document.getElementById("suPass").value;
 
-if(!email || !password){
-document.getElementById("error").innerText="Fill all fields";
-return;
-}
+localStorage.setItem("tempUser", JSON.stringify({email,pass}));
 
-if(users.find(u=>u.email===email)){
-document.getElementById("error").innerText="Email already exists";
-return;
-}
-
-localStorage.setItem("tempUser", JSON.stringify({email,password}));
-
-document.getElementById("login-step1").style.display="none";
-document.getElementById("login-step2").style.display="block";
+document.getElementById("signupBox").style.display="none";
+document.getElementById("verifyBox").style.display="block";
 }
 
 // LOGIN
 function logIn(){
-let email = document.getElementById("email").value;
-let password = document.getElementById("password").value;
+let email=document.getElementById("liEmail").value;
+let pass=document.getElementById("liPass").value;
 
-let user = users.find(u=>u.email===email && u.password===password);
+let user=users.find(u=>u.email===email && u.pass===pass);
 
 if(user){
-document.getElementById("login-step1").style.display="none";
-document.getElementById("content").style.display="block";
+document.getElementById("loginBox").style.display="none";
+document.getElementById("portal").style.display="block";
 }else{
-document.getElementById("error").innerText="Incorrect login";
+document.getElementById("loginError").innerText="Incorrect login";
 }
 }
 
-// GENERATE CODE
+// CODE
 function generateCode(){
 let chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%";
 let code="";
@@ -130,47 +182,39 @@ code+=chars[Math.floor(Math.random()*chars.length)];
 return code;
 }
 
-// SEND CODE
 function sendCode(){
 if(cooldown) return;
 
-let tempUser = JSON.parse(localStorage.getItem("tempUser"));
-if(!tempUser) return;
+let tempUser=JSON.parse(localStorage.getItem("tempUser"));
 
-currentCode = generateCode();
-localStorage.setItem("tempCode", currentCode);
+currentCode=generateCode();
+localStorage.setItem("tempCode",currentCode);
 
 emailjs.send("service_ah9oypr","template_0qg4mop",{
 to_email: tempUser.email,
 code: currentCode
-})
-.then(()=> alert("Code sent to email"))
-.catch(()=> alert("Email failed but code shown"));
+});
 
-alert("Your code: "+currentCode);
-
+alert("Code: "+currentCode);
 startTimer();
 }
 
-// TIMER
 function startTimer(){
 cooldown=true;
-let time=180;
+let t=180;
 let timer=document.getElementById("timer");
 
-let interval=setInterval(()=>{
-timer.innerText="Resend in "+time+"s";
-time--;
-
-if(time<0){
-clearInterval(interval);
+let i=setInterval(()=>{
+timer.innerText="Resend in "+t+"s";
+t--;
+if(t<0){
+clearInterval(i);
 cooldown=false;
 timer.innerText="";
 }
 },1000);
 }
 
-// VERIFY CODE
 function verifyCode(){
 let input=document.getElementById("code").value;
 let saved=localStorage.getItem("tempCode");
@@ -178,20 +222,26 @@ let tempUser=JSON.parse(localStorage.getItem("tempUser"));
 
 if(input===saved){
 users.push(tempUser);
-localStorage.setItem("users", JSON.stringify(users));
+localStorage.setItem("users",JSON.stringify(users));
 
-document.getElementById("login-step2").style.display="none";
-document.getElementById("content").style.display="block";
-
+document.getElementById("verifyBox").style.display="none";
+document.getElementById("portal").style.display="block";
 }else{
 document.getElementById("codeError").innerText="Wrong code";
 }
+}
+
+// SLIDER
+function showSlide(subject){
+document.querySelectorAll(".slide").forEach(s=>s.classList.remove("active"));
+document.getElementById(subject).classList.add("active");
 }
 
 </script>
 
 </body>
 </html>
+
 
 
 
