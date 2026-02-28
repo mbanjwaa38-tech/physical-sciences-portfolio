@@ -10,9 +10,10 @@ body {
     margin:0;
     font-family: 'Segoe UI', sans-serif;
     overflow:hidden;
+    color:white;
 }
 
-/* Animated background */
+/* Animated Background */
 .background {
     position:fixed;
     width:100%;
@@ -22,21 +23,19 @@ body {
     animation:gradient 15s ease infinite;
     z-index:-1;
 }
-
 @keyframes gradient {
     0%{background-position:0% 50%}
     50%{background-position:100% 50%}
     100%{background-position:0% 50%}
 }
 
-/* Floating science images */
+/* BIG Floating Science Icons */
 .floating {
     position:absolute;
-    width:80px;
-    opacity:0.25;
-    animation:float 12s infinite linear;
+    width:140px;
+    opacity:0.35;
+    animation:float 15s infinite linear;
 }
-
 @keyframes float {
     from {transform:translateY(100vh) rotate(0deg);} 
     to {transform:translateY(-20vh) rotate(360deg);} 
@@ -44,8 +43,8 @@ body {
 
 /* Login Card */
 .card {
-    width:320px;
-    padding:30px;
+    width:340px;
+    padding:35px;
     background:rgba(255,255,255,0.08);
     backdrop-filter: blur(12px);
     border-radius:20px;
@@ -54,24 +53,24 @@ body {
     top:50%;
     left:50%;
     transform:translate(-50%,-50%);
-    color:white;
 }
 
 input {
     width:90%;
-    padding:10px;
-    margin:10px 0;
+    padding:12px;
+    margin:12px 0;
     border:none;
     border-radius:10px;
 }
 
 button {
-    padding:10px 20px;
+    padding:12px 20px;
     border:none;
     border-radius:10px;
     background:#00c6ff;
     color:white;
     cursor:pointer;
+    font-size:16px;
 }
 
 /* Dashboard */
@@ -79,9 +78,19 @@ button {
     display:none;
     height:100vh;
     width:100%;
-    overflow:hidden;
 }
 
+/* Navigation */
+.nav {
+    position:absolute;
+    top:20px;
+    right:20px;
+}
+.nav button {
+    margin-left:10px;
+}
+
+/* Slider */
 .slider {
     display:flex;
     width:200%;
@@ -92,44 +101,48 @@ button {
 .slide {
     width:50%;
     display:flex;
-    justify-content:center;
-    align-items:center;
     flex-direction:column;
-    color:white;
-}
-
-.nav {
-    position:absolute;
-    top:20px;
-    right:20px;
-}
-
-.nav button {
-    margin-left:10px;
+    align-items:center;
+    justify-content:center;
 }
 
 .paper-btn {
     padding:20px 40px;
-    margin:10px;
+    margin:15px;
     background:#00c6ff;
     border-radius:15px;
-    font-size:20px;
+    font-size:22px;
+}
+
+/* PDF Viewer */
+.pdf-viewer {
+    width:80%;
+    height:70vh;
+    margin-top:20px;
+    border-radius:15px;
+    overflow:hidden;
+}
+iframe {
+    width:100%;
+    height:100%;
+    border:none;
 }
 </style>
 </head>
 
 <body>
+
 <div class="background"></div>
 
-<!-- Floating images -->
+<!-- Bigger Floating Science Icons -->
 <img src="https://cdn-icons-png.flaticon.com/512/4149/4149676.png" class="floating" style="left:10%; animation-duration:18s;">
 <img src="https://cdn-icons-png.flaticon.com/512/2940/2940402.png" class="floating" style="left:40%; animation-duration:22s;">
 <img src="https://cdn-icons-png.flaticon.com/512/2784/2784487.png" class="floating" style="left:70%; animation-duration:25s;">
 
 <!-- Login -->
 <div class="card" id="loginCard">
-<h2>Login</h2>
-<input type="text" id="user" placeholder="Username">
+<h2>Student Login</h2>
+<input type="email" id="user" placeholder="Enter Email">
 <input type="password" id="pass" placeholder="Password">
 <button onclick="login()">Login</button>
 <br><br>
@@ -138,6 +151,7 @@ button {
 
 <!-- Dashboard -->
 <div class="dashboard" id="dash">
+
 <div class="nav">
 <button onclick="showPhysics()">Physics</button>
 <button onclick="showChem()">Chemistry</button>
@@ -145,14 +159,22 @@ button {
 
 <div class="slider" id="slider">
 
+<!-- Physics -->
 <div class="slide">
-<h1>Physics</h1>
-<button class="paper-btn" onclick="window.open('physics-paper1.pdf')">Paper 1</button>
+<h1>Physics Paper 1</h1>
+<button class="paper-btn" onclick="loadPDF('physics-paper1.pdf')">Open Paper</button>
+<div class="pdf-viewer">
+<iframe id="pdfFrame"></iframe>
+</div>
 </div>
 
+<!-- Chemistry -->
 <div class="slide">
-<h1>Chemistry</h1>
-<button class="paper-btn" onclick="window.open('chemistry-paper2.pdf')">Paper 2</button>
+<h1>Chemistry Paper 2</h1>
+<button class="paper-btn" onclick="loadPDF('chemistry-paper2.pdf')">Open Paper</button>
+<div class="pdf-viewer">
+<iframe id="pdfFrame2"></iframe>
+</div>
 </div>
 
 </div>
@@ -175,10 +197,20 @@ function showPhysics(){
 function showChem(){
     document.getElementById('slider').style.transform='translateX(-50%)';
 }
+
+/* Open PDF inside site */
+function loadPDF(file){
+    if(document.getElementById('slider').style.transform === 'translateX(-50%)'){
+        document.getElementById('pdfFrame2').src=file;
+    } else {
+        document.getElementById('pdfFrame').src=file;
+    }
+}
 </script>
 
 </body>
 </html>
+
 
 
 
