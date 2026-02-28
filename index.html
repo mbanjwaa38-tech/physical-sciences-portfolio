@@ -5,7 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Grade 12 Science Portal</title>
 <style>
-body {margin:0;font-family:'Segoe UI',sans-serif;color:white;overflow:hidden;}
+body {
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    color:white;
+    overflow:hidden;
+}
+/* Header */
 .header {
     position:absolute;
     top:0;
@@ -18,41 +24,58 @@ body {margin:0;font-family:'Segoe UI',sans-serif;color:white;overflow:hidden;}
     backdrop-filter: blur(8px);
     z-index:10;
 }
-/* Animated Background */
+/* Background Animation */
 .background {
-    position:fixed;width:100%;height:100%;
+    position:fixed;
+    width:100%;
+    height:100%;
     background: linear-gradient(-45deg,#0f2027,#203a43,#2c5364,#1c1c1c);
     background-size:400% 400%;
     animation:gradient 15s ease infinite;
     z-index:-1;
 }
-@keyframes gradient {0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%}}
+@keyframes gradient {
+    0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%}
+}
+/* Floating Icons */
 .floating {position:absolute;width:140px;opacity:0.35;animation:float 15s infinite linear;}
 @keyframes float {from {transform:translateY(100vh) rotate(0deg);} to {transform:translateY(-20vh) rotate(360deg);}}
 
 /* Login Card */
 .card {width:340px;padding:35px;background:rgba(255,255,255,0.08);backdrop-filter: blur(12px);border-radius:20px;text-align:center;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);}
 .motivation {font-size:14px;margin-bottom:15px;color:#b0e0ff;}
-input {width:90%; padding:12px; margin:12px 0; border:none; border-radius:10px;}
-button {padding:12px 20px; border:none; border-radius:10px; background:#00c6ff; color:white; cursor:pointer; font-size:16px;}
+input {width:90%;padding:12px;margin:12px 0;border:none;border-radius:10px;}
+button {padding:12px 20px;border:none;border-radius:10px;background:#00c6ff;color:white;cursor:pointer;font-size:16px;}
 
 /* Dashboard */
-.dashboard {display:none; height:100vh; width:100%; padding-top:60px; text-align:center;}
+.dashboard {display:none;height:100vh;width:100%;}
 
-/* Navigation at top corners */
+/* Navigation top right */
 .nav {
-    position:absolute; top:20px; width:100%; display:flex; justify-content:space-between; padding:0 20px; z-index:5;
+    position:absolute;
+    top:20px;
+    right:20px;
+    display:flex;
+    gap:10px;
+    z-index:5;
 }
-.nav button {padding:12px 20px; border-radius:10px; background:#00c6ff; cursor:pointer;}
+.nav button {
+    padding:12px 20px;
+    border-radius:10px;
+    background:#00c6ff;
+    cursor:pointer;
+}
 
 /* Slider */
-.slider {display:flex;width:200%;height:90%;transition:transform 0.5s ease;}
-.slide {width:50%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:20px;}
-.paper-btn {padding:20px 40px;margin:15px; background:#00c6ff; border-radius:15px; font-size:22px;}
+.slider {display:flex;width:200%;height:100%;transition:transform 0.5s ease;}
+.slide {width:50%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:40px;}
 
-/* PDF Viewer bigger */
-.pdf-viewer {width:90%; height:80vh; margin-top:10px; border-radius:15px; overflow:hidden;}
-iframe {width:100%; height:100%; border:none;}
+/* Paper button */
+.paper-btn {padding:20px 40px;margin:15px;background:#00c6ff;border-radius:15px;font-size:22px;}
+
+/* PDF Viewer expanded */
+.pdf-viewer {width:95%;height:85vh;margin-top:15px;border-radius:10px;overflow:hidden;}
+iframe {width:100%;height:100%;border:none;}
 </style>
 </head>
 <body>
@@ -61,51 +84,54 @@ iframe {width:100%; height:100%; border:none;}
 <div class="header">SCIENCE PAPERS PORTAL</div>
 
 <!-- Floating Icons -->
-<img src="https://cdn-icons-png.flaticon.com/512/4149/4149676.png" class="floating" style="left:10%; animation-duration:18s;">
-<img src="https://cdn-icons-png.flaticon.com/512/2940/2940402.png" class="floating" style="left:40%; animation-duration:22s;">
-<img src="https://cdn-icons-png.flaticon.com/512/2784/2784487.png" class="floating" style="left:70%; animation-duration:25s;">
+<img src="https://cdn-icons-png.flaticon.com/512/4149/4149676.png" class="floating" style="left:10%;animation-duration:18s;">
+<img src="https://cdn-icons-png.flaticon.com/512/2940/2940402.png" class="floating" style="left:40%;animation-duration:22s;">
+<img src="https://cdn-icons-png.flaticon.com/512/2784/2784487.png" class="floating" style="left:70%;animation-duration:25s;">
 
 <!-- Login Card -->
 <div class="card" id="loginCard">
-  <div class="motivation">Unlock your potential in Physics & Chemistry!</div>
-  <h2>Student Login</h2>
-  <input type="email" id="user" placeholder="Enter Email">
-  <input type="password" id="pass" placeholder="Password">
-  <button onclick="login()">Login</button>
-  <br><br>
-  <button onclick="signup()">Sign Up</button>
+    <div class="motivation">Unlock your potential in Physics & Chemistry!</div>
+    <h2>Student Login</h2>
+    <input type="email" id="user" placeholder="Enter Email">
+    <input type="password" id="pass" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <br><br>
+    <button onclick="signup()">Sign Up</button>
 </div>
 
 <!-- Dashboard -->
 <div class="dashboard" id="dash">
-  <div class="nav">
-      <button onclick="showSlide('physics')">Physics</button>
-      <button onclick="showSlide('chemistry')">Chemistry</button>
-  </div>
-
-  <div class="slider" id="slider">
-    <!-- Physics Slide -->
-    <div class="slide" id="physics">
-        <h1>Physics Paper 1</h1>
-        <button class="paper-btn" onclick="loadPDF('physics-paper1.pdf','physicsFrame')">Open Paper</button>
-        <div class="pdf-viewer"><iframe id="physicsFrame"></iframe></div>
+    <!-- Navigation -->
+    <div class="nav">
+        <button onclick="showSlide('physics')">Physics</button>
+        <button onclick="showSlide('chemistry')">Chemistry</button>
     </div>
 
-    <!-- Chemistry Slide -->
-    <div class="slide" id="chemistry">
-        <h1>Chemistry Paper 2</h1>
-        <button class="paper-btn" onclick="loadPDF('chemistry-paper2.pdf','chemistryFrame')">Open Paper</button>
-        <div class="pdf-viewer"><iframe id="chemistryFrame"></iframe></div>
+    <!-- Slider -->
+    <div class="slider" id="slider">
+        <!-- Physics -->
+        <div class="slide" id="physics">
+            <h1>Physics Paper 1</h1>
+            <button class="paper-btn" onclick="loadPDF('physics-paper1.pdf','physicsFrame')">Open Paper</button>
+            <div class="pdf-viewer">
+                <iframe id="physicsFrame"></iframe>
+            </div>
+        </div>
+        <!-- Chemistry -->
+        <div class="slide" id="chemistry">
+            <h1>Chemistry Paper 2</h1>
+            <button class="paper-btn" onclick="loadPDF('chemistry-paper2.pdf','chemistryFrame')">Open Paper</button>
+            <div class="pdf-viewer">
+                <iframe id="chemistryFrame"></iframe>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <script>
-// USERS storage
 let users = JSON.parse(localStorage.getItem("users")||"[]");
 let tempUser = null;
 let currentCode = '';
-let activeSlide = 'physics';
 
 // Sign Up
 function signup(){
@@ -123,9 +149,7 @@ function signup(){
         users.push(tempUser);
         localStorage.setItem("users", JSON.stringify(users));
         loginAfterVerification();
-    } else {
-        alert("Incorrect code. Sign up again."); tempUser=null; currentCode='';
-    }
+    } else { alert("Incorrect code. Sign up again."); tempUser=null; currentCode=''; }
 }
 
 // Login
@@ -146,12 +170,11 @@ function loginAfterVerification(){
 
 // Slide Navigation
 function showSlide(slide){
-    activeSlide = slide;
     const slider = document.getElementById('slider');
     slider.style.transform = slide==='physics'?'translateX(0%)':'translateX(-50%)';
 }
 
-// Load PDF in correct iframe
+// Load PDF in iframe
 function loadPDF(file,id){
     document.getElementById(id).src = file;
 }
@@ -159,6 +182,7 @@ function loadPDF(file,id){
 
 </body>
 </html>
+
 
 
 
