@@ -1,243 +1,152 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grade 12 Physical Science Portal</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Grotesk:wght@500;700&display=swap');
-:root {
-  --primary: #0f172a;
-  --accent: #06b6d4;
-  --accent-dark: #0891b2;
-  --secondary: #6366f1;
-  --bg: #f8fafc;
-  --card: #ffffff;
-  --text: #1e293b;
-  --text-light: #64748b;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Inter', sans-serif; background: var(--bg); color: var(--text); line-height:1.6; }
-header { background: var(--primary); color:white; padding:2rem; text-align:center; }
-h1 { font-family:'Space Grotesk', sans-serif; font-size:2rem; }
-.subtitle { font-size:1rem; color:#94a3b8; margin-top:0.5rem; }
-main { padding:2rem; max-width:1200px; margin:0 auto; }
-input, button { padding:0.5rem; margin:0.5rem 0; width:100%; max-width:300px; }
-button { cursor:pointer; background:var(--accent); color:white; border:none; border-radius:5px; }
-#login-step1, #login-step2, #book-content { margin-top:2rem; }
-#login-step2, #book-content { display:none; }
-.card { background: var(--card); padding:1.5rem; margin-bottom:1rem; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
-.card h3 { color:var(--primary); margin-bottom:0.5rem; }
-.card ul { list-style:none; padding-left:1rem; }
-.card li { padding:0.25rem 0; position:relative; }
-.card li::before { content:'▸'; position:absolute; left:-1rem; color:var(--accent); font-weight:bold; }
-#error, #code-error, #timer { color:red; margin-top:0.5rem; }
-</style>
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<script>
-emailjs.init("_6kozn-J9-QGCchMe"); // Your public key
-</script>
+  <title>Grade 12 Physical Sciences Portal</title>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      background: #0d1117;
+      color: white;
+    }
+
+    .box {
+      margin: 20px auto;
+      padding: 20px;
+      width: 300px;
+      background: #161b22;
+      border-radius: 10px;
+    }
+
+    input {
+      margin: 5px;
+      padding: 8px;
+      width: 90%;
+    }
+
+    button {
+      padding: 10px;
+      margin-top: 10px;
+      background: #238636;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    #books {
+      display: none;
+      margin-top: 30px;
+    }
+
+    iframe {
+      width: 90%;
+      height: 500px;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+  </style>
 </head>
+
 <body>
 
-<header>
-<h1>Excellence in Physical Sciences Teaching</h1>
-<p class="subtitle">Digital Portfolio</p>
-</header>
+<h1>📘 Physical Sciences Portal</h1>
 
-<main>
+<div class="box" id="loginBox">
+  <h3>Student Login</h3>
+  <input type="email" id="email" placeholder="Enter Email">
+  <input type="password" id="password" placeholder="Enter Password">
+  <button onclick="sendCode()">Send Code</button>
 
-<!-- Step 1: Sign Up / Log In -->
-<div id="login-step1">
-  <h2>Sign Up / Log In</h2>
-  <input type="email" id="email" placeholder="Email"><br>
-  <input type="text" id="school" placeholder="School"><br>
-  <input type="password" id="password" placeholder="Password"><br>
-  <button onclick="signUp()">Sign Up</button>
-  <button onclick="logIn()">Log In</button>
-  <p id="error"></p>
+  <div id="codeBox" style="display:none;">
+    <input type="text" id="code" placeholder="Enter Verification Code">
+    <button onclick="verifyCode()">Verify</button>
+    <p id="timer"></p>
+  </div>
 </div>
 
-<!-- Step 2: Access Code -->
-<div id="login-step2">
-  <h2>Enter Access Code</h2>
-  <input type="text" id="access-code" placeholder="Enter Code"><br>
-  <button id="send-code-btn" onclick="sendCode()">Send Code to Email</button>
-  <button onclick="verifyCode()">Unlock Book</button>
-  <p id="code-error"></p>
-  <p id="timer"></p>
-</div>
+<div id="books">
+  <h2>📚 Study Materials</h2>
 
-<!-- Book Content -->
-<div id="book-content">
-<h2>Solutions for All - Grade 12 Physical Sciences</h2>
-<section class="section">
-<h2>1. Learner-Centred Teaching</h2>
-<div class="card"><h3>Teaching Model</h3>
-<ul>
-<li>Diagnostic Assessments</li>
-<li>Conceptual Explanations</li>
-<li>Targeted Multimedia Resources</li>
-<li>Assessment Worksheets</li>
-</ul></div>
-<div class="card"><h3>Creative Use of Resources</h3>
-<ul>
-<li>PhET Simulations</li>
-<li>Practical Demonstrations & Experiments</li>
-<li>VR Lab Activities</li>
-<li>Digital Quizzes</li>
-</ul></div>
-</section>
-<section class="section">
-<h2>2. Promoting Physical Sciences</h2>
-<div class="card"><h3>Competitions & Outreach</h3>
-<ul>
-<li>Science Olympiads & Expos</li>
-<li>Extra Lessons & Enrichment Programs</li>
-<li>Educational Excursions</li>
-<li>University Outreach Programs</li>
-<li>STEM Mentor Programmes</li>
-</ul></div>
-<div class="card"><h3>Enthusiasm & Motivation</h3>
-<ul>
-<li>Interactive Lessons</li>
-<li>STEM Awareness Initiatives</li>
-<li>Real-World Science Applications</li>
-<li>Career Guidance & Mentorship</li>
-</ul></div>
-</section>
-<section class="section">
-<h2>3. Professional Development & Leadership</h2>
-<div class="card"><h3>Subject Competence</h3>
-<ul>
-<li>Alignment of Lesson Plans with National Standards</li>
-<li>Practical Experiments & Intervention Materials</li>
-<li>Content Workshops & ICT Tools</li>
-</ul></div>
-<div class="card"><h3>Lifelong Learning</h3>
-<ul>
-<li>Ongoing Postgraduate Studies</li>
-<li>Curriculum & Content Workshops</li>
-<li>Professional Learning Communities</li>
-<li>Examiner Roles & Moderation</li>
-</ul></div>
-<div class="card"><h3>Activities Beyond the Classroom</h3>
-<ul>
-<li>Science Competitions & Olympiads</li>
-<li>Educational Excursions</li>
-<li>Tutoring & Extra Lessons</li>
-<li>STEM Mentorship Programs</li>
-</ul></div>
-</section>
+  <h3>Physics Paper 1</h3>
+  <iframe src="physics-paper1.pdf"></iframe>
+
+  <h3>Chemistry Paper 2</h3>
+  <iframe src="chemistry-paper2.pdf"></iframe>
 </div>
 
 <script>
-let users = JSON.parse(localStorage.getItem('users')||'[]');
-let currentCode='';
-let canResend=true;
-let cooldown=180; // 3 min
 
-function signUp(){
-  const email=document.getElementById('email').value;
-  const school=document.getElementById('school').value;
-  const password=document.getElementById('password').value;
-  const errorEl=document.getElementById('error');
-  if(!email || !school || !password){ errorEl.textContent="All fields required"; return; }
+emailjs.init("_6kozn-J9-QGCchMe");
 
-  if(users.some(u=>u.email===email)){
-    errorEl.textContent="Email already registered. Please log in.";
-    return;
-  }
+let generatedCode = "";
+let timerInterval;
 
-  // first-time signup
-  const tempUser={email, school, password};
-  localStorage.setItem('tempUser', JSON.stringify(tempUser));
-  document.getElementById('login-step1').style.display='none';
-  document.getElementById('login-step2').style.display='block';
+function sendCode() {
 
-  // optional: show code popup
-  currentCode=generateRandomCode();
-  alert(`Your access code: ${currentCode}`);
+    let email = document.getElementById("email").value;
+
+    if(email == "") {
+        alert("Enter email first");
+        return;
+    }
+
+    generatedCode = Math.random().toString(36).substring(2,10).toUpperCase();
+
+    alert("Your login code is: " + generatedCode);
+
+    emailjs.send("service_ah9oypr","template_0qg4mop",{
+        to_email: email,
+        passcode: generatedCode
+    });
+
+    document.getElementById("codeBox").style.display = "block";
+
+    startTimer();
 }
 
-function logIn(){
-  const email=document.getElementById('email').value;
-  const password=document.getElementById('password').value;
-  const errorEl=document.getElementById('error');
-  if(!email || !password){ errorEl.textContent="All fields required"; return; }
+function startTimer() {
+    let timeLeft = 180;
 
-  const user=users.find(u=>u.email===email && u.password===password);
-  if(user){
-    document.getElementById('login-step1').style.display='none';
-    document.getElementById('book-content').style.display='block';
-  }else{
-    errorEl.textContent="Email or password incorrect.";
-  }
+    timerInterval = setInterval(() => {
+        document.getElementById("timer").innerText =
+        "Resend available in: " + timeLeft + " seconds";
+
+        timeLeft--;
+
+        if(timeLeft < 0){
+            clearInterval(timerInterval);
+            document.getElementById("timer").innerText =
+            "You can resend a new code now.";
+        }
+    },1000);
 }
 
-// generate random code
-function generateRandomCode(length=8){
-  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
-  let code='';
-  for(let i=0;i<length;i++){ code+=chars.charAt(Math.floor(Math.random()*chars.length)); }
-  return code;
-}
-
-// send code via EmailJS
-function sendCode(){
-  if(!canResend) return;
-  const tempUser=JSON.parse(localStorage.getItem('tempUser'));
-  if(!tempUser){ alert("No user data"); return; }
-
-  currentCode=currentCode||generateRandomCode();
-  localStorage.setItem('tempCode', currentCode);
-
-  const serviceID="service_ah9oypr";
-  const templateID="template_0qg4mop";
-  const templateParams={to_email: tempUser.email, code: currentCode};
-
-  emailjs.send(serviceID, templateID, templateParams)
-    .then(()=>{alert(`Code sent to: ${tempUser.email}`); startCooldown();},
-          (err)=>{alert("Email send failed. Check EmailJS."); console.error(err);});
-}
-
-// timer
-function startCooldown(){
-  canResend=false;
-  const btn=document.getElementById('send-code-btn');
-  btn.disabled=true;
-  let timer=cooldown;
-  const timerEl=document.getElementById('timer');
-  const interval=setInterval(()=>{
-    timerEl.textContent=`Resend code in ${timer}s`; timer--;
-    if(timer<0){ clearInterval(interval); timerEl.textContent=''; btn.disabled=false; canResend=true; }
-  },1000);
-}
-
-// verify code
 function verifyCode(){
-  const inputCode=document.getElementById('access-code').value;
-  const tempUser=JSON.parse(localStorage.getItem('tempUser'));
-  const savedCode=localStorage.getItem('tempCode');
-  const codeErrorEl=document.getElementById('code-error');
-  if(inputCode===savedCode){
-    users.push(tempUser);
-    localStorage.setItem('users', JSON.stringify(users));
 
-    // clear temp
-    localStorage.removeItem('tempUser');
-    localStorage.removeItem('tempCode');
+    let enteredCode = document.getElementById("code").value;
 
-    document.getElementById('login-step2').style.display='none';
-    document.getElementById('book-content').style.display='block';
-  }else{
-    codeErrorEl.textContent="Incorrect code. Try again.";
-  }
+    if(enteredCode === generatedCode){
+
+        localStorage.setItem("studentEmail", document.getElementById("email").value);
+        localStorage.setItem("studentPass", document.getElementById("password").value);
+
+        alert("Login Successful ✅");
+
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("books").style.display = "block";
+
+    } else {
+        alert("Wrong Code ❌");
+    }
 }
+
 </script>
 
 </body>
 </html>
+
 
 
 
