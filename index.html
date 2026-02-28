@@ -97,12 +97,19 @@ button {
 /* Welcome Section */
 .welcome {
     text-align:center;
-    margin-top:80px;
+    margin-top:100px;
     font-size:22px;
     max-width:600px;
     margin-left:auto;
     margin-right:auto;
     line-height:1.6;
+    transition:0.6s ease;
+}
+
+.welcome.hide {
+    opacity:0;
+    transform:translateY(-30px);
+    pointer-events:none;
 }
 
 /* Navigation */
@@ -159,12 +166,10 @@ iframe {
 
 <div class="background"></div>
 
-<!-- Website Heading -->
 <div class="header">
 SCIENCE PAPERS PORTAL
 </div>
 
-<!-- Floating Icons -->
 <img src="https://cdn-icons-png.flaticon.com/512/4149/4149676.png" class="floating" style="left:10%; animation-duration:18s;">
 <img src="https://cdn-icons-png.flaticon.com/512/2940/2940402.png" class="floating" style="left:40%; animation-duration:22s;">
 <img src="https://cdn-icons-png.flaticon.com/512/2784/2784487.png" class="floating" style="left:70%; animation-duration:25s;">
@@ -187,8 +192,8 @@ SCIENCE PAPERS PORTAL
 <button onclick="showChem()">Chemistry</button>
 </div>
 
-<!-- 🌌 Welcome Message -->
-<div class="welcome">
+<!-- Welcome -->
+<div class="welcome" id="welcomeBox">
 <h2>Welcome to the Physics Portal</h2>
 <p>
 Where curiosity meets calculation.<br>
@@ -205,7 +210,6 @@ Your journey into precision starts now.
 
 <div class="slider" id="slider">
 
-<!-- Physics -->
 <div class="slide">
 <h1>Physics Paper 1</h1>
 <button class="paper-btn" onclick="loadPDF('physics-paper1.pdf')">Open Paper</button>
@@ -214,7 +218,6 @@ Your journey into precision starts now.
 </div>
 </div>
 
-<!-- Chemistry -->
 <div class="slide">
 <h1>Chemistry Paper 2</h1>
 <button class="paper-btn" onclick="loadPDF('chemistry-paper2.pdf')">Open Paper</button>
@@ -237,10 +240,12 @@ function signup(){
 }
 
 function showPhysics(){
+    document.getElementById('welcomeBox').classList.add('hide');
     document.getElementById('slider').style.transform='translateX(0%)';
 }
 
 function showChem(){
+    document.getElementById('welcomeBox').classList.add('hide');
     document.getElementById('slider').style.transform='translateX(-50%)';
 }
 
@@ -255,6 +260,7 @@ function loadPDF(file){
 
 </body>
 </html>
+
 
 
 
