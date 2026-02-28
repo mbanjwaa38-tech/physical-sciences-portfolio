@@ -5,56 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Grade 12 Science Portal</title>
 <style>
-body {
-    margin:0;
-    font-family:'Segoe UI', sans-serif;
-    overflow:hidden;
-    color:white;
-}
-.header {
-    position:absolute;
-    top:0;
-    width:100%;
-    text-align:center;
-    padding:15px;
-    font-size:28px;
-    font-weight:bold;
-    background:rgba(0,0,0,0.3);
-    backdrop-filter: blur(8px);
-    z-index:10;
-}
-.background {
-    position:fixed;
-    width:100%;
-    height:100%;
-    background: linear-gradient(-45deg,#0f2027,#203a43,#2c5364,#1c1c1c);
-    background-size:400% 400%;
-    animation:gradient 15s ease infinite;
-    z-index:-1;
-}
+body {margin:0; font-family:'Segoe UI',sans-serif; overflow:hidden; color:white;}
+.header {position:absolute; top:0; width:100%; text-align:center; padding:15px; font-size:28px; font-weight:bold; background:rgba(0,0,0,0.3); backdrop-filter: blur(8px); z-index:10;}
+.background {position:fixed; width:100%; height:100%; background:linear-gradient(-45deg,#0f2027,#203a43,#2c5364,#1c1c1c); background-size:400% 400%; animation:gradient 15s ease infinite; z-index:-1;}
 @keyframes gradient {0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%}}
-.floating {position:absolute;width:140px;opacity:0.35;animation:float 15s infinite linear;}
+.floating {position:absolute; width:140px; opacity:0.35; animation:float 15s infinite linear;}
 @keyframes float {from {transform:translateY(100vh) rotate(0deg);} to {transform:translateY(-20vh) rotate(360deg);}}
-
-/* Login Card */
 .card {width:340px;padding:35px;background:rgba(255,255,255,0.08);backdrop-filter: blur(12px);border-radius:20px;text-align:center;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);}
 .motivation {font-size:14px;margin-bottom:15px;color:#b0e0ff;}
-input {width:90%;padding:12px;margin:12px 0;border:none;border-radius:10px;}
-button {padding:12px 20px;border:none;border-radius:10px;background:#00c6ff;color:white;cursor:pointer;font-size:16px;}
-
-/* Dashboard */
-.dashboard {display:none;height:100vh;width:100%;}
-
-/* Navigation */
-.nav {position:absolute;top:20px;right:20px;}
+input {width:90%; padding:12px; margin:12px 0; border:none; border-radius:10px;}
+button {padding:12px 20px; border:none; border-radius:10px; background:#00c6ff; color:white; cursor:pointer; font-size:16px;}
+.dashboard {display:none; height:100vh; width:100%;}
+.nav {position:absolute; top:20px; right:20px;}
 .nav button {margin-left:10px;}
-
-/* Slider */
-.slider {display:flex;width:200%;height:100%;transition:0.5s;}
-.slide {width:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.paper-btn {padding:20px 40px;margin:15px;background:#00c6ff;border-radius:15px;font-size:22px;}
-.pdf-viewer {width:80%;height:70vh;margin-top:20px;border-radius:15px;overflow:hidden;}
-iframe {width:100%;height:100%;border:none;}
+.slider {display:flex; width:200%; height:100%; transition:0.5s;}
+.slide {width:50%; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+.paper-btn {padding:20px 40px; margin:15px; background:#00c6ff; border-radius:15px; font-size:22px;}
+.pdf-viewer {width:80%; height:70vh; margin-top:20px; border-radius:15px; overflow:hidden;}
+iframe {width:100%; height:100%; border:none;}
 </style>
 </head>
 <body>
@@ -62,7 +30,7 @@ iframe {width:100%;height:100%;border:none;}
 <div class="background"></div>
 <div class="header">SCIENCE PAPERS PORTAL</div>
 
-<!-- Floating Icons -->
+<!-- Floating icons -->
 <img src="https://cdn-icons-png.flaticon.com/512/4149/4149676.png" class="floating" style="left:10%; animation-duration:18s;">
 <img src="https://cdn-icons-png.flaticon.com/512/2940/2940402.png" class="floating" style="left:40%; animation-duration:22s;">
 <img src="https://cdn-icons-png.flaticon.com/512/2784/2784487.png" class="floating" style="left:70%; animation-duration:25s;">
@@ -103,6 +71,7 @@ iframe {width:100%;height:100%;border:none;}
 </div>
 
 <script>
+// USERS storage
 let users = JSON.parse(localStorage.getItem("users")||"[]");
 let tempUser = null;
 let currentCode = '';
@@ -116,8 +85,8 @@ function signup(){
     if(users.some(u=>u.email===email)){ alert("Email already registered. Login."); return; }
 
     tempUser = {email, pass};
-    currentCode = generateCode();
-    alert("Your verification code is: " + currentCode); // <-- popup
+    currentCode = Math.random().toString(36).substring(2,10).toUpperCase();
+    alert("Your verification code is: " + currentCode);
 
     let userCode = prompt("Enter the verification code:");
     if(userCode===currentCode){
@@ -143,20 +112,20 @@ function login(){
 function loginAfterVerification(){
     document.getElementById('loginCard').style.display='none';
     document.getElementById('dash').style.display='block';
+    activeSlide = 'physics';
 }
 
 // Navigation
 function showPhysics(){ 
-    activeSlide='physics';
+    activeSlide = 'physics';
     document.getElementById('slider').style.transform='translateX(0%)'; 
 }
-
 function showChem(){ 
-    activeSlide='chem';
+    activeSlide = 'chem';
     document.getElementById('slider').style.transform='translateX(-50%)'; 
 }
 
-// Open PDF inside page
+// Load PDF inside page
 function loadPDF(file){
     if(activeSlide==='chem'){
         document.getElementById('pdfFrame2').src=file;
@@ -164,18 +133,11 @@ function loadPDF(file){
         document.getElementById('pdfFrame').src=file;
     }
 }
-
-// Generate code
-function generateCode(){
-    let chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
-    let code="";
-    for(let i=0;i<8;i++){ code+=chars.charAt(Math.floor(Math.random()*chars.length)); }
-    return code;
-}
 </script>
 
 </body>
 </html>
+
 
 
 
