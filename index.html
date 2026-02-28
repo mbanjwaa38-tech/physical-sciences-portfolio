@@ -13,20 +13,6 @@ body {
     color:white;
 }
 
-/* Website Heading */
-.header {
-    position:absolute;
-    top:0;
-    width:100%;
-    text-align:center;
-    padding:15px;
-    font-size:28px;
-    font-weight:bold;
-    background:rgba(0,0,0,0.3);
-    backdrop-filter: blur(8px);
-    z-index:10;
-}
-
 /* Animated Background */
 .background {
     position:fixed;
@@ -64,7 +50,7 @@ body {
     border-radius:20px;
     text-align:center;
     position:absolute;
-    top:55%;
+    top:50%;
     left:50%;
     transform:translate(-50%,-50%);
 }
@@ -92,7 +78,7 @@ button {
     display:none;
     height:100vh;
     width:100%;
-    overflow:hidden;
+    overflow:auto;
 }
 
 /* Navigation */
@@ -104,9 +90,10 @@ button {
 }
 .nav button {
     margin-left:10px;
+    font-size:16px;
 }
 
-/* Paper Sections */
+/* Paper Section */
 .paper-section {
     display:none;
     width:100%;
@@ -115,7 +102,7 @@ button {
     flex-direction:column;
     align-items:center;
     justify-content:flex-start;
-    padding-top:100px;
+    padding-top:80px;
 }
 
 .paper-btn {
@@ -146,10 +133,6 @@ iframe {
 
 <div class="background"></div>
 
-<div class="header">
-SCIENCE PAPERS PORTAL
-</div>
-
 <!-- Floating Icons -->
 <img src="https://cdn-icons-png.flaticon.com/512/4149/4149676.png" class="floating" style="left:10%; animation-duration:18s;">
 <img src="https://cdn-icons-png.flaticon.com/512/2940/2940402.png" class="floating" style="left:40%; animation-duration:22s;">
@@ -173,7 +156,7 @@ SCIENCE PAPERS PORTAL
 <button onclick="showPaper('chemistry')">Chemistry</button>
 </div>
 
-<!-- Paper Sections -->
+<!-- Physics Paper -->
 <div id="physics" class="paper-section">
 <h1>Physics Paper 1</h1>
 <button class="paper-btn" onclick="loadPDF('physics-paper1.pdf','pdfFramePhysics')">Open Paper</button>
@@ -182,6 +165,7 @@ SCIENCE PAPERS PORTAL
 </div>
 </div>
 
+<!-- Chemistry Paper -->
 <div id="chemistry" class="paper-section">
 <h1>Chemistry Paper 2</h1>
 <button class="paper-btn" onclick="loadPDF('chemistry-paper2.pdf','pdfFrameChem')">Open Paper</button>
@@ -193,32 +177,35 @@ SCIENCE PAPERS PORTAL
 </div>
 
 <script>
+let currentPaper = 'physics'; // Track active paper
+
 function login(){
     document.getElementById('loginCard').style.display='none';
     document.getElementById('dash').style.display='block';
-    // Show Physics by default
-    showPaper('physics');
+    showPaper('physics'); // Show Physics by default
 }
 
 function signup(){
     alert('Account created! Please login');
 }
 
-// Show selected paper and hide the other
-function showPaper(subject){
+// Show paper by id
+function showPaper(paper){
+    currentPaper = paper;
     document.getElementById('physics').style.display='none';
     document.getElementById('chemistry').style.display='none';
-    document.getElementById(subject).style.display='flex';
+    document.getElementById(paper).style.display='flex';
 }
 
-// Load PDF in iframe
+// Load PDF inside proper iframe
 function loadPDF(file, frameId){
-    document.getElementById(frameId).src=file;
+    document.getElementById(frameId).src = file;
 }
 </script>
 
 </body>
 </html>
+
 
 
 
