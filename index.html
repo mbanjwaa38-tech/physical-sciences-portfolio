@@ -13,7 +13,7 @@ body {
     color:white;
 }
 
-/* Website Heading */
+/* Header */
 .header {
     position:absolute;
     top:0;
@@ -117,30 +117,18 @@ button {
     margin-left:10px;
 }
 
-/* Slider */
-.slider-container {
-    overflow:hidden;
+/* Paper Sections */
+.paper-section {
+    display:none;
     width:100%;
-    height:80%;
-    position:relative;
-}
-.slider {
-    display:flex;
-    width:200%;
     height:100%;
-    transition:transform 0.5s ease;
-}
-
-.slide {
-    width:50%;
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:flex-start;
-    padding-top:60px;
+    padding-top:80px;
 }
 
-/* Paper Buttons */
 .paper-btn {
     padding:20px 40px;
     margin:15px;
@@ -173,6 +161,7 @@ iframe {
 SCIENCE PAPERS PORTAL
 </div>
 
+<!-- Floating Icons -->
 <img src="https://cdn-icons-png.flaticon.com/512/4149/4149676.png" class="floating" style="left:10%; animation-duration:18s;">
 <img src="https://cdn-icons-png.flaticon.com/512/2940/2940402.png" class="floating" style="left:40%; animation-duration:22s;">
 <img src="https://cdn-icons-png.flaticon.com/512/2784/2784487.png" class="floating" style="left:70%; animation-duration:25s;">
@@ -191,8 +180,8 @@ SCIENCE PAPERS PORTAL
 <div class="dashboard" id="dash">
 
 <div class="nav">
-<button onclick="showPhysics()">Physics</button>
-<button onclick="showChem()">Chemistry</button>
+<button onclick="showPaper('physics')">Physics</button>
+<button onclick="showPaper('chemistry')">Chemistry</button>
 </div>
 
 <!-- Welcome -->
@@ -211,27 +200,20 @@ Your journey into precision starts now.
 </p>
 </div>
 
-<div class="slider-container">
-<div class="slider" id="slider">
-
-<!-- Physics -->
-<div class="slide">
+<!-- Paper Sections -->
+<div id="physics" class="paper-section">
 <h1>Physics Paper 1</h1>
-<button class="paper-btn" onclick="loadPDF('physics-paper1.pdf','pdfFrame')">Open Paper</button>
+<button class="paper-btn" onclick="loadPDF('physics-paper1.pdf','pdfFramePhysics')">Open Paper</button>
 <div class="pdf-viewer">
-<iframe id="pdfFrame"></iframe>
+<iframe id="pdfFramePhysics"></iframe>
 </div>
 </div>
 
-<!-- Chemistry -->
-<div class="slide">
+<div id="chemistry" class="paper-section">
 <h1>Chemistry Paper 2</h1>
-<button class="paper-btn" onclick="loadPDF('chemistry-paper2.pdf','pdfFrame2')">Open Paper</button>
+<button class="paper-btn" onclick="loadPDF('chemistry-paper2.pdf','pdfFrameChem')">Open Paper</button>
 <div class="pdf-viewer">
-<iframe id="pdfFrame2"></iframe>
-</div>
-</div>
-
+<iframe id="pdfFrameChem"></iframe>
 </div>
 </div>
 
@@ -247,17 +229,15 @@ function signup(){
     alert('Account created! Please login');
 }
 
-function showPhysics(){
-    document.getElementById('welcomeBox').style.display='none'; // COMPLETELY remove from layout
-    document.getElementById('slider').style.transform='translateX(0%)';
+// Show a paper and hide others
+function showPaper(subject){
+    document.getElementById('welcomeBox').style.display='none';
+    document.getElementById('physics').style.display='none';
+    document.getElementById('chemistry').style.display='none';
+    document.getElementById(subject).style.display='flex';
 }
 
-function showChem(){
-    document.getElementById('welcomeBox').style.display='none'; // COMPLETELY remove from layout
-    document.getElementById('slider').style.transform='translateX(-50%)';
-}
-
-/* Load PDF in specific iframe */
+// Load PDF inside iframe
 function loadPDF(file, frameId){
     document.getElementById(frameId).src=file;
 }
@@ -265,6 +245,7 @@ function loadPDF(file, frameId){
 
 </body>
 </html>
+
 
 
 
