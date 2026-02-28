@@ -3,68 +3,127 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grade 12 Physical Science Portal</title>
+<title>Physical Science Portal</title>
 
 <style>
+
+/* ==== BACKGROUND ==== */
 body {
-  font-family: Arial;
-  background:#f4f6f9;
-  text-align:center;
+  margin:0;
+  font-family:Arial;
+  background:linear-gradient(135deg,#0f172a,#020617);
+  overflow:hidden;
+  color:white;
 }
 
-input, button {
-  padding:10px;
-  margin:5px;
-  width:250px;
-}
-
-button {
+/* Animated floating science glow */
+body::before, body::after{
+  content:"";
+  position:absolute;
+  width:400px;
+  height:400px;
   background:#06b6d4;
+  opacity:0.15;
+  border-radius:50%;
+  filter:blur(100px);
+  animation:float 12s infinite ease-in-out;
+}
+
+body::after{
+  background:#6366f1;
+  top:60%;
+  left:60%;
+  animation-delay:5s;
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-50px)}
+}
+
+/* ==== CENTER BOX ==== */
+.panel{
+  position:relative;
+  z-index:2;
+  margin:auto;
+  margin-top:10vh;
+  width:320px;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(20px);
+  border-radius:20px;
+  padding:30px;
+  box-shadow:0 0 40px rgba(6,182,212,0.3);
+}
+
+input, button{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
   border:none;
+  border-radius:8px;
+}
+
+button{
+  background:#06b6d4;
   color:white;
   cursor:pointer;
 }
 
-#signupBox, #loginBox, #verifyBox, #portal {
+button:hover{
+  background:#0891b2;
+}
+
+/* ==== HIDE SECTIONS ==== */
+#signupBox, #loginBox, #verifyBox, #portal{
   display:none;
 }
 
-/* Subject Tabs */
-.tabs {
+/* ==== DASHBOARD ==== */
+#portal{
+  margin-top:5vh;
+}
+
+.tabs{
   display:flex;
   justify-content:center;
+  gap:20px;
+}
+
+.tab-btn{
+  padding:15px 40px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(10px);
+  border-radius:12px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.tab-btn:hover{
+  background:#06b6d4;
+}
+
+.viewer{
+  width:90%;
+  margin:auto;
   margin-top:20px;
 }
 
-.tab-btn {
-  padding:12px 25px;
-  margin:5px;
-  background:#0f172a;
-  color:white;
-  cursor:pointer;
-}
-
-.viewer {
-  width:90%;
-  height:600px;
-  margin:20px auto;
-  overflow:hidden;
-  position:relative;
-}
-
-.slide {
+.slide{
   display:none;
 }
 
-.slide.active {
+.slide.active{
   display:block;
 }
 
-iframe {
+iframe{
   width:100%;
   height:600px;
   border:none;
+  border-radius:12px;
+  box-shadow:0 0 30px rgba(6,182,212,0.3);
 }
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
@@ -75,47 +134,46 @@ emailjs.init("_6kozn-J9-QGCchMe");
 </head>
 <body>
 
-<h1>Physical Science Portal</h1>
-
-<!-- HOME OPTIONS -->
-<div id="home">
-  <button onclick="showSignup()">Sign Up</button>
-  <button onclick="showLogin()">Log In</button>
+<!-- HOME -->
+<div class="panel" id="home">
+<h2>Science Portal</h2>
+<button onclick="showSignup()">Sign Up</button>
+<button onclick="showLogin()">Log In</button>
 </div>
 
 <!-- SIGNUP -->
-<div id="signupBox">
+<div class="panel" id="signupBox">
 <h2>Sign Up</h2>
-<input type="email" id="suEmail" placeholder="Email"><br>
-<input type="password" id="suPass" placeholder="Password"><br>
+<input type="email" id="suEmail" placeholder="Email">
+<input type="password" id="suPass" placeholder="Password">
 <button onclick="signUp()">Continue</button>
 </div>
 
 <!-- LOGIN -->
-<div id="loginBox">
+<div class="panel" id="loginBox">
 <h2>Log In</h2>
-<input type="email" id="liEmail" placeholder="Email"><br>
-<input type="password" id="liPass" placeholder="Password"><br>
+<input type="email" id="liEmail" placeholder="Email">
+<input type="password" id="liPass" placeholder="Password">
 <button onclick="logIn()">Login</button>
 <p id="loginError"></p>
 </div>
 
 <!-- VERIFY -->
-<div id="verifyBox">
+<div class="panel" id="verifyBox">
 <h2>Enter Code</h2>
-<input type="text" id="code"><br>
+<input type="text" id="code">
 <button onclick="sendCode()">Send Code</button>
 <button onclick="verifyCode()">Verify</button>
 <p id="timer"></p>
 <p id="codeError"></p>
 </div>
 
-<!-- PORTAL -->
+<!-- DASHBOARD -->
 <div id="portal">
 
 <div class="tabs">
-  <div class="tab-btn" onclick="showSlide('physics')">Physics</div>
-  <div class="tab-btn" onclick="showSlide('chemistry')">Chemistry</div>
+  <div class="tab-btn" onclick="showSlide('physics')">Physics Paper 1</div>
+  <div class="tab-btn" onclick="showSlide('chemistry')">Chemistry Paper 2</div>
 </div>
 
 <div class="viewer">
@@ -137,46 +195,40 @@ let currentCode="";
 let cooldown=false;
 
 function showSignup(){
-document.getElementById("home").style.display="none";
-document.getElementById("signupBox").style.display="block";
+home.style.display="none";
+signupBox.style.display="block";
 }
 
 function showLogin(){
-document.getElementById("home").style.display="none";
-document.getElementById("loginBox").style.display="block";
+home.style.display="none";
+loginBox.style.display="block";
 }
 
-// SIGNUP
 function signUp(){
-let email=document.getElementById("suEmail").value;
-let pass=document.getElementById("suPass").value;
-
+let email=suEmail.value;
+let pass=suPass.value;
 localStorage.setItem("tempUser", JSON.stringify({email,pass}));
-
-document.getElementById("signupBox").style.display="none";
-document.getElementById("verifyBox").style.display="block";
+signupBox.style.display="none";
+verifyBox.style.display="block";
 }
 
-// LOGIN
 function logIn(){
-let email=document.getElementById("liEmail").value;
-let pass=document.getElementById("liPass").value;
-
+let email=liEmail.value;
+let pass=liPass.value;
 let user=users.find(u=>u.email===email && u.pass===pass);
 
 if(user){
-document.getElementById("loginBox").style.display="none";
-document.getElementById("portal").style.display="block";
+loginBox.style.display="none";
+portal.style.display="block";
 }else{
-document.getElementById("loginError").innerText="Incorrect login";
+loginError.innerText="Incorrect login";
 }
 }
 
-// CODE
 function generateCode(){
-let chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%";
+let chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 let code="";
-for(let i=0;i<8;i++){
+for(let i=0;i<6;i++){
 code+=chars[Math.floor(Math.random()*chars.length)];
 }
 return code;
@@ -184,9 +236,7 @@ return code;
 
 function sendCode(){
 if(cooldown) return;
-
 let tempUser=JSON.parse(localStorage.getItem("tempUser"));
-
 currentCode=generateCode();
 localStorage.setItem("tempCode",currentCode);
 
@@ -202,8 +252,6 @@ startTimer();
 function startTimer(){
 cooldown=true;
 let t=180;
-let timer=document.getElementById("timer");
-
 let i=setInterval(()=>{
 timer.innerText="Resend in "+t+"s";
 t--;
@@ -216,22 +264,20 @@ timer.innerText="";
 }
 
 function verifyCode(){
-let input=document.getElementById("code").value;
+let input=code.value;
 let saved=localStorage.getItem("tempCode");
 let tempUser=JSON.parse(localStorage.getItem("tempUser"));
 
 if(input===saved){
 users.push(tempUser);
 localStorage.setItem("users",JSON.stringify(users));
-
-document.getElementById("verifyBox").style.display="none";
-document.getElementById("portal").style.display="block";
+verifyBox.style.display="none";
+portal.style.display="block";
 }else{
-document.getElementById("codeError").innerText="Wrong code";
+codeError.innerText="Wrong code";
 }
 }
 
-// SLIDER
 function showSlide(subject){
 document.querySelectorAll(".slide").forEach(s=>s.classList.remove("active"));
 document.getElementById(subject).classList.add("active");
@@ -241,6 +287,7 @@ document.getElementById(subject).classList.add("active");
 
 </body>
 </html>
+
 
 
 
