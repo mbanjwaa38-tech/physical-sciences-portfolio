@@ -92,6 +92,7 @@ button {
     display:none;
     height:100vh;
     width:100%;
+    overflow:hidden;
 }
 
 /* Welcome Section */
@@ -117,17 +118,24 @@ button {
     position:absolute;
     top:20px;
     right:20px;
+    z-index:5;
 }
 .nav button {
     margin-left:10px;
 }
 
 /* Slider */
+.slider-container {
+    overflow:hidden;
+    width:100%;
+    height:80%;
+    position:relative;
+}
 .slider {
     display:flex;
     width:200%;
-    height:80%;
-    transition:0.5s;
+    height:100%;
+    transition:transform 0.5s ease;
 }
 
 .slide {
@@ -135,9 +143,11 @@ button {
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:center;
+    justify-content:flex-start;
+    padding-top:60px;
 }
 
+/* Paper Buttons */
 .paper-btn {
     padding:20px 40px;
     margin:15px;
@@ -194,7 +204,7 @@ SCIENCE PAPERS PORTAL
 
 <!-- Welcome -->
 <div class="welcome" id="welcomeBox">
-<h2>Welcome to the Physics Portal</h2>
+<h2>Welcome to the Science Portal</h2>
 <p>
 Where curiosity meets calculation.<br>
 Where formulas become understanding.<br>
@@ -208,25 +218,30 @@ Your journey into precision starts now.
 </p>
 </div>
 
+<div class="slider-container">
 <div class="slider" id="slider">
 
+<!-- Physics -->
 <div class="slide">
 <h1>Physics Paper 1</h1>
-<button class="paper-btn" onclick="loadPDF('physics-paper1.pdf')">Open Paper</button>
+<button class="paper-btn" onclick="loadPDF('physics-paper1.pdf','pdfFrame')">Open Paper</button>
 <div class="pdf-viewer">
 <iframe id="pdfFrame"></iframe>
 </div>
 </div>
 
+<!-- Chemistry -->
 <div class="slide">
 <h1>Chemistry Paper 2</h1>
-<button class="paper-btn" onclick="loadPDF('chemistry-paper2.pdf')">Open Paper</button>
+<button class="paper-btn" onclick="loadPDF('chemistry-paper2.pdf','pdfFrame2')">Open Paper</button>
 <div class="pdf-viewer">
 <iframe id="pdfFrame2"></iframe>
 </div>
 </div>
 
 </div>
+</div>
+
 </div>
 
 <script>
@@ -249,17 +264,15 @@ function showChem(){
     document.getElementById('slider').style.transform='translateX(-50%)';
 }
 
-function loadPDF(file){
-    if(document.getElementById('slider').style.transform === 'translateX(-50%)'){
-        document.getElementById('pdfFrame2').src=file;
-    } else {
-        document.getElementById('pdfFrame').src=file;
-    }
+/* Load PDF in specific iframe */
+function loadPDF(file, frameId){
+    document.getElementById(frameId).src=file;
 }
 </script>
 
 </body>
 </html>
+
 
 
 
