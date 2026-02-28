@@ -8,9 +8,23 @@
 <style>
 body {
     margin:0;
-    font-family: 'Segoe UI', sans-serif;
+    font-family:'Segoe UI', sans-serif;
     overflow:hidden;
     color:white;
+}
+
+/* Website Heading */
+.header {
+    position:absolute;
+    top:0;
+    width:100%;
+    text-align:center;
+    padding:15px;
+    font-size:28px;
+    font-weight:bold;
+    background:rgba(0,0,0,0.3);
+    backdrop-filter: blur(8px);
+    z-index:10;
 }
 
 /* Animated Background */
@@ -29,7 +43,7 @@ body {
     100%{background-position:0% 50%}
 }
 
-/* BIG Floating Science Icons */
+/* Floating Icons */
 .floating {
     position:absolute;
     width:140px;
@@ -50,7 +64,7 @@ body {
     border-radius:20px;
     text-align:center;
     position:absolute;
-    top:50%;
+    top:55%;
     left:50%;
     transform:translate(-50%,-50%);
 }
@@ -80,6 +94,17 @@ button {
     width:100%;
 }
 
+/* Welcome Section */
+.welcome {
+    text-align:center;
+    margin-top:80px;
+    font-size:22px;
+    max-width:600px;
+    margin-left:auto;
+    margin-right:auto;
+    line-height:1.6;
+}
+
 /* Navigation */
 .nav {
     position:absolute;
@@ -94,7 +119,7 @@ button {
 .slider {
     display:flex;
     width:200%;
-    height:100%;
+    height:80%;
     transition:0.5s;
 }
 
@@ -134,7 +159,12 @@ iframe {
 
 <div class="background"></div>
 
-<!-- Bigger Floating Science Icons -->
+<!-- Website Heading -->
+<div class="header">
+SCIENCE PAPERS PORTAL
+</div>
+
+<!-- Floating Icons -->
 <img src="https://cdn-icons-png.flaticon.com/512/4149/4149676.png" class="floating" style="left:10%; animation-duration:18s;">
 <img src="https://cdn-icons-png.flaticon.com/512/2940/2940402.png" class="floating" style="left:40%; animation-duration:22s;">
 <img src="https://cdn-icons-png.flaticon.com/512/2784/2784487.png" class="floating" style="left:70%; animation-duration:25s;">
@@ -155,6 +185,22 @@ iframe {
 <div class="nav">
 <button onclick="showPhysics()">Physics</button>
 <button onclick="showChem()">Chemistry</button>
+</div>
+
+<!-- 🌌 Welcome Message -->
+<div class="welcome">
+<h2>Welcome to the Physics Portal</h2>
+<p>
+Where curiosity meets calculation.<br>
+Where formulas become understanding.<br>
+And where future scientists sharpen their edge.<br><br>
+
+Dive into Paper 1.<br>
+Master Paper 2.<br>
+Build the mindset that solves the universe.<br><br>
+
+Your journey into precision starts now.
+</p>
 </div>
 
 <div class="slider" id="slider">
@@ -198,7 +244,6 @@ function showChem(){
     document.getElementById('slider').style.transform='translateX(-50%)';
 }
 
-/* Open PDF inside site */
 function loadPDF(file){
     if(document.getElementById('slider').style.transform === 'translateX(-50%)'){
         document.getElementById('pdfFrame2').src=file;
@@ -210,6 +255,7 @@ function loadPDF(file){
 
 </body>
 </html>
+
 
 
 
